@@ -21,12 +21,12 @@ export default async function Home() {
       <h2 className="text-3xl font-bold mb-6">Categorías</h2>
       <div className="list-disc list-inside">
         {dataCategorias.data.map((categoria) => (
-          <div>
+          <div key={categoria.id} className="mb-6">
             <div key={categoria.id}>{categoria.nombre}</div>
             {categoria.imagen && (
-              <div className="relative w-3xl h-32 mb-4">
+              <div key={categoria.slug} className="relative w-3xl h-32 mb-4">
                 <Image
-                  src={`http://localhost:1337${categoria.imagen.url}`}
+                  src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${categoria.imagen.url}`}
                   alt={categoria.imagen.alternativeText || categoria.nombre}
                   fill
                   className="object-cover rounded-md"
@@ -45,7 +45,7 @@ export default async function Home() {
               {producto.imagenes && producto.imagenes.length > 0 && (
                 <div className="relative w-full h-64 mb-4">
                   <Image
-                    src={`http://localhost:1337${producto.imagenes[0].url}`}
+                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${producto.imagenes[0].url}`}
                     alt={
                       producto.imagenes[0].alternativeText || producto.titulo
                     }

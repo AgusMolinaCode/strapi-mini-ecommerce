@@ -1,7 +1,8 @@
 "use server";
 
+const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+
 export async function getStrapiData(url: string) {
-  const baseUrl = "http://localhost:1337";
   try {
     const response = await fetch(baseUrl + url);
     const data = await response.json();
@@ -12,7 +13,6 @@ export async function getStrapiData(url: string) {
 }
 
 export async function getProductos() {
-  const baseUrl = "http://localhost:1337";
   try {
     const response = await fetch(`${baseUrl}/api/productos?populate=*`);
     const data = await response.json();
@@ -23,7 +23,6 @@ export async function getProductos() {
 }
 
 export async function getCategorias() {
-  const baseUrl = "http://localhost:1337";
   try {
     const response = await fetch(`${baseUrl}/api/categorias?populate=*`);
     const data = await response.json();
