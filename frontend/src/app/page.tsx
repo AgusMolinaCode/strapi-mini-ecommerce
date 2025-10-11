@@ -1,9 +1,10 @@
+import HeroSection from "@/components/hero/HeroSection";
 import { getStrapiData } from "@/data/actions/strapi";
 import { ProductosResponse, CategoriasResponse } from "@/lib/interface";
 import Image from "next/image";
 
 export default async function Home() {
-  const strapiData = await getStrapiData("/api/home-page");
+  const strapiData = await getStrapiData("/api/home-page?populate=*");
   const dataProductos: ProductosResponse = await getStrapiData(
     "/api/productos?populate=*"
   );
@@ -11,33 +12,32 @@ export default async function Home() {
     "/api/categorias?populate=*"
   );
 
-  const { title, description } = strapiData.data;
-
   return (
-    <main className="container mx-auto py-6">
-      <h1 className="text-5xl font-bold">{title}</h1>
-      <p className="text-xl mt-4">{description}</p>
+    <main>
+      <HeroSection data={strapiData.data} />
 
-      <h2 className="text-3xl font-bold mb-6">Categorías</h2>
-      <div className="list-disc list-inside">
-        {dataCategorias.data.map((categoria) => (
-          <div key={categoria.id} className="mb-6">
-            <div key={categoria.id}>{categoria.nombre}</div>
-            {categoria.imagen && (
-              <div key={categoria.slug} className="relative w-3xl h-32 mb-4">
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${categoria.imagen.url}`}
-                  alt={categoria.imagen.alternativeText || categoria.nombre}
-                  fill
-                  className="object-cover rounded-md"
-                />
-              </div>
-            )}
-          </div>
-        ))}
+      <div className="container mx-auto py-6">
+        <h2 className="text-3xl font-bold mb-6">Categorías</h2>
+        <div className="list-disc list-inside">
+          {dataCategorias.data.map((categoria) => (
+            <div key={categoria.id} className="mb-6" >
+              <div key={categoria.id}>{categoria.nombre}</div>
+              {categoria.imagen && (
+                <div key={categoria.slug} className="relative w-3xl h-32 mb-4">
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${categoria.imagen.url}`}
+                    alt={categoria.imagen.alternativeText || categoria.nombre}
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="mt-12">
+      <div className="container mx-auto py-6 mt-12">
         <h2 className="text-3xl font-bold mb-6">Productos</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {dataProductos.data.map((producto) => (

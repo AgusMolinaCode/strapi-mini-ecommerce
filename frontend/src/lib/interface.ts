@@ -3,17 +3,19 @@ export interface ImageFormat {
   hash: string;
   ext: string;
   mime: string;
+  path: string | null;
   width: number;
   height: number;
   size: number;
+  sizeInBytes: number;
   url: string;
 }
 
 export interface ImageFormats {
-  thumbnail: ImageFormat;
-  large: ImageFormat;
-  medium: ImageFormat;
-  small: ImageFormat;
+  thumbnail?: ImageFormat;
+  large?: ImageFormat;
+  medium?: ImageFormat;
+  small?: ImageFormat;
 }
 
 export interface Imagen {
@@ -32,11 +34,14 @@ export interface Imagen {
   url: string;
   previewUrl: string | null;
   provider: string;
-  provider_metadata: null;
+  provider_metadata: any;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
 }
+
+// Alias for compatibility
+export type StrapiImage = Imagen;
 
 export interface ProductoSimple {
   id: number;
@@ -93,4 +98,22 @@ export interface ProductosResponse {
 
 export interface CategoriasResponse {
   data: Categoria[];
+}
+
+// HomePage interface
+export interface HomePage {
+  id: number;
+  documentId: string;
+  title: string;
+  description: string;
+  imagen: Imagen;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+// Generic Strapi Response wrapper
+export interface StrapiResponse<T> {
+  data: T;
+  meta: Record<string, any>;
 }
