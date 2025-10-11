@@ -1,5 +1,5 @@
-import Image from 'next/image';
-import { HomePage } from '@/lib/interface';
+import Image from "next/image";
+import { HomePage } from "@/lib/interface";
 
 interface HeroSectionProps {
   data: HomePage;
@@ -7,7 +7,9 @@ interface HeroSectionProps {
 
 export default function HeroSection({ data }: HeroSectionProps) {
   const imageUrl = data.imagen?.url
-    ? `${process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'}${data.imagen.url}`
+    ? `${process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"}${
+        data.imagen.url
+      }`
     : null;
 
   return (
@@ -45,7 +47,6 @@ export default function HeroSection({ data }: HeroSectionProps) {
           <div className="flex flex-col sm:flex-row gap-4">
             <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white cursor-pointer text-2xl rounded transition-all duration-300 transform hover:scale-105">
               Unite Ahora
-              
             </button>
             <button className="px-8 py-3 bg-white hover:bg-gray-100 text-gray-900 font-bold rounded transition-all duration-300">
               Más Información
