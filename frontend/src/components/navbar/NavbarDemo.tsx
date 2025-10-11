@@ -17,7 +17,7 @@ export function NavbarDemo() {
   const navItems = [
     {
       name: "Inicio",
-      link: "#inicio",
+      link: "/",
     },
     {
       name: "Planes",
