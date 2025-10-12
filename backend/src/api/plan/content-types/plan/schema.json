@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "plans",
+  "info": {
+    "singularName": "plan",
+    "pluralName": "plans",
+    "displayName": "Plan"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string"
+    },
+    "precio": {
+      "type": "decimal"
+    },
+    "periodo": {
+      "type": "string",
+      "required": true
+    },
+    "popular": {
+      "type": "boolean"
+    },
+    "feature": {
+      "type": "component",
+      "component": "plan.feature",
+      "repeatable": true
+    }
+  }
+}

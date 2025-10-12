@@ -31,3 +31,8 @@ export async function getCategorias() {
     console.error(error);
   }
 }
+
+
+export async function getPlans() {
+  
+}

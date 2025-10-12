@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { HomePage } from "@/lib/interface";
+import { ArrowRight } from "lucide-react";
 
 interface HeroSectionProps {
   data: HomePage;
@@ -45,10 +46,11 @@ export default function HeroSection({ data }: HeroSectionProps) {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white cursor-pointer text-2xl rounded transition-all duration-300 transform hover:scale-105">
+            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white cursor-pointer text-2xl rounded-xl flex items-center gap-2 group">
               Unite Ahora
+              <ArrowRight className="w-5 h-5 mb-1 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="px-8 py-3 bg-white hover:bg-gray-100 text-gray-900 font-bold rounded transition-all duration-300">
+            <button className="px-4 py-2 bg-white hover:bg-gray-100 text-gray-900 cursor-pointer text-2xl rounded-xl transition-all duration-300">
               Más Información
             </button>
           </div>

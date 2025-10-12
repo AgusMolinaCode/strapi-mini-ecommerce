@@ -1,4 +1,5 @@
 import HeroSection from "@/components/hero/HeroSection";
+import PlanHeroSection from "@/components/planHeroSection/PlanHeroSection";
 import { getStrapiData } from "@/data/actions/strapi";
 import { ProductosResponse, CategoriasResponse } from "@/lib/interface";
 import Image from "next/image";
@@ -15,7 +16,7 @@ export default async function Home() {
   return (
     <main>
       <HeroSection data={strapiData.data} />
-
+      <PlanHeroSection />
       <div className="container mx-auto py-6">
         <h2 className="text-3xl font-bold mb-6">Categorías</h2>
         <div className="list-disc list-inside">
