@@ -2,6 +2,7 @@ import React from "react";
 import { ArrowRight, Flame } from "lucide-react";
 import { getPlans } from "@/data/actions/strapi";
 import type { Plan } from "@/lib/interface";
+import Link from "next/link";
 
 // Funciones helper para mapear estilos
 const getEstiloBoton = (popular: boolean | null): string => {
@@ -145,6 +146,7 @@ const PlanHeroSection = async () => {
                 </ul>
 
                 {/* Button */}
+                <Link href="/planes">
                 <button
                   className={`w-full rounded-xl cursor-pointer font-semibold ${buttonStyle} transition-all duration-200 flex items-center justify-center gap-2 group ${
                     plan.popular ? "py-5 px-8 text-lg shadow-md" : "py-4 px-6"
@@ -157,6 +159,7 @@ const PlanHeroSection = async () => {
                     }`}
                   />
                 </button>
+                </Link>
               </div>
             );
           })}
@@ -164,10 +167,12 @@ const PlanHeroSection = async () => {
 
         {/* See All Plans Button */}
         <div className="text-center">
+          <Link href="/planes">
           <button className="px-8 py-3 cursor-pointer bg-white text-gray-900 border-2 border-gray-300 rounded-xl font-semibold hover:bg-gray-50 text-2xl transition-all duration-200 inline-flex items-center gap-2 group">
             Ver Todos Los Planes
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@ export function NavbarDemo() {
     },
     {
       name: "Planes",
-      link: "#planes",
+      link: "/planes",
     },
     {
       name: "Tienda",

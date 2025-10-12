@@ -507,11 +507,15 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     feature: Schema.Attribute.Component<'plan.feature', true>;
+    feature_full: Schema.Attribute.Component<'plan.feature-full', true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::plan.plan'> &
       Schema.Attribute.Private;
     nombre: Schema.Attribute.String;
     periodo: Schema.Attribute.String & Schema.Attribute.Required;
+    plan_id: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     popular: Schema.Attribute.Boolean;
     precio: Schema.Attribute.Decimal;
     publishedAt: Schema.Attribute.DateTime;

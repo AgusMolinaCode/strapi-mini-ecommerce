@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_plan_feature_fulls",
+  "info": {
+    "displayName": "feature_full"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "text"
+    }
+  },
+  "config": {}
+}

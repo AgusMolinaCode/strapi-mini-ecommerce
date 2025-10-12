@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import { NavbarDemo } from "@/components/navbar/NavbarDemo";
+import Footer from "@/components/footer/footer";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body className="antialiased">
         <NavbarDemo />
         {children}
+        <Footer />
       </body>
     </html>
   );
