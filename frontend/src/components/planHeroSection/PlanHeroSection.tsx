@@ -46,7 +46,7 @@ const PlanHeroSection = async () => {
   if (nonPopularPlans.length > 1) orderedPlans.push(nonPopularPlans[1]);
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 py-16 px-4">
+    <div className="w-full bg-gray-50 py-10 md:py-24 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
