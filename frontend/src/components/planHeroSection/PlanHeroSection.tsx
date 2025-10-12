@@ -25,7 +25,6 @@ const getPeriodoTexto = (periodo: string): string => {
 
 const PlanHeroSection = async () => {
   const response = await getPlans();
-  console.log("Plans from Strapi:", response);
 
   const plans: Plan[] = response?.data || [];
 
@@ -65,7 +64,7 @@ const PlanHeroSection = async () => {
         </div>
 
         {/* Pricing Cards */}
-        <div className="flex flex-col md:flex-row items-stretch justify-center gap-6 lg:gap-8 mb-12">
+        <div className="flex flex-col lg:flex-row items-stretch justify-center gap-6 lg:gap-8 mb-12">
           {orderedPlans.map((plan) => {
             const borderStyle = getEstiloBorde(plan.popular);
             const buttonStyle = getEstiloBoton(plan.popular);
@@ -76,8 +75,8 @@ const PlanHeroSection = async () => {
                 key={plan.id}
                 className={`relative rounded-2xl border-2 ${borderStyle} shadow-sm hover:shadow-lg transition-all duration-300 w-full ${
                   plan.popular
-                    ? "md:w-[360px] lg:w-[460px] lg:scale-110 lg:-translate-y-4 z-10 bg-gradient-to-br from-red-50 via-pink-50 to-orange-50"
-                    : "md:w-[300px] lg:w-[380px] bg-white"
+                    ? "lg:w-[460px] lg:scale-110 lg:-translate-y-4 z-10 bg-gradient-to-br from-red-100 via-pink-100 to-orange-100"
+                    : "lg:w-[380px] bg-white"
                 } ${plan.popular ? "p-10" : "p-8"}`}
               >
                 {/* Fire Icon - Solo para popular */}
@@ -125,9 +124,7 @@ const PlanHeroSection = async () => {
 
                 {/* Features */}
                 <ul
-                  className={`mb-8 ${
-                    plan.popular ? "space-y-5" : "space-y-4"
-                  }`}
+                  className={`mb-8 ${plan.popular ? "space-y-5" : "space-y-4"}`}
                 >
                   {plan.feature?.map((feature) => (
                     <li key={feature.id} className="flex items-start">
@@ -149,10 +146,8 @@ const PlanHeroSection = async () => {
 
                 {/* Button */}
                 <button
-                  className={`w-full rounded-xl font-semibold ${buttonStyle} transition-all duration-200 flex items-center justify-center gap-2 group ${
-                    plan.popular
-                      ? "py-5 px-8 text-lg shadow-md"
-                      : "py-4 px-6"
+                  className={`w-full rounded-xl cursor-pointer font-semibold ${buttonStyle} transition-all duration-200 flex items-center justify-center gap-2 group ${
+                    plan.popular ? "py-5 px-8 text-lg shadow-md" : "py-4 px-6"
                   }`}
                 >
                   Seleccionar Plan
