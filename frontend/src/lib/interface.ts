@@ -117,3 +117,34 @@ export interface StrapiResponse<T> {
   data: T;
   meta: Record<string, any>;
 }
+
+// Plan interfaces
+export interface PlanFeature {
+  id: number;
+  text: string;
+}
+
+export interface Plan {
+  id: number;
+  documentId: string;
+  nombre: string;
+  precio: number;
+  periodo: string;
+  popular: boolean | null;
+  feature: PlanFeature[];
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface PlansResponse {
+  data: Plan[];
+  meta: {
+    pagination?: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}

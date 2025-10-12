@@ -34,5 +34,11 @@ export async function getCategorias() {
 
 
 export async function getPlans() {
-  
+  try {
+    const response = await fetch(`${baseUrl}/api/plans?populate=*`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
 }
