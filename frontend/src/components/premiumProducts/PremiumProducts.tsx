@@ -65,7 +65,7 @@ const PremiumProducts = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-6 mb-12">
           {products.map((product) => (
             <div
               key={product.id}
