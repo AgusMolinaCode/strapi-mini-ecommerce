@@ -56,7 +56,7 @@ const PlanHeroSection = async () => {
               PLANES DE ENTRENAMIENTO
             </span>
           </div>
-          <h1 className="text-6xl md:text-8xl font-bold text-gray-900 mb-4">
+          <h1 className=" text-5xl sm:text-6xl md:text-7xl font-bold text-gray-900 mb-4">
             Elegí Tu Plan
           </h1>
           <p className="text-xl md:text-2xl text-gray-600">
@@ -136,7 +136,7 @@ const PlanHeroSection = async () => {
                       ></span>
                       <span
                         className={`text-gray-700 ${
-                          plan.popular ? "text-lg" : ""
+                          plan.popular ? "text-xl" : "text-lg"
                         }`}
                       >
                         {feature.text}
@@ -147,18 +147,18 @@ const PlanHeroSection = async () => {
 
                 {/* Button */}
                 <Link href="/planes">
-                <button
-                  className={`w-full rounded-xl cursor-pointer font-semibold ${buttonStyle} transition-all duration-200 flex items-center justify-center gap-2 group ${
-                    plan.popular ? "py-5 px-8 text-lg shadow-md" : "py-4 px-6"
-                  }`}
-                >
-                  Seleccionar Plan
-                  <ArrowRight
-                    className={`group-hover:translate-x-1 transition-transform ${
-                      plan.popular ? "w-6 h-6" : "w-5 h-5"
+                  <button
+                    className={`w-full rounded-xl cursor-pointer font-semibold ${buttonStyle} transition-all duration-200 flex items-center justify-center gap-2 group ${
+                      plan.popular ? "py-5 px-8 text-lg shadow-md" : "py-4 px-6"
                     }`}
-                  />
-                </button>
+                  >
+                    Seleccionar Plan
+                    <ArrowRight
+                      className={`group-hover:translate-x-1 transition-transform ${
+                        plan.popular ? "w-6 h-6" : "w-5 h-5"
+                      }`}
+                    />
+                  </button>
                 </Link>
               </div>
             );
@@ -168,10 +168,10 @@ const PlanHeroSection = async () => {
         {/* See All Plans Button */}
         <div className="text-center">
           <Link href="/planes">
-          <button className="px-8 py-3 cursor-pointer bg-white text-gray-900 border-2 border-gray-300 rounded-xl font-semibold hover:bg-gray-50 text-2xl transition-all duration-200 inline-flex items-center gap-2 group">
-            Ver Todos Los Planes
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </button>
+            <button className="px-8 py-3 cursor-pointer bg-white text-gray-900 border-2 border-gray-300 rounded-xl font-semibold hover:bg-gray-50 text-xl md:text-2xl transition-all duration-200 inline-flex items-center gap-2 group">
+              Ver Todos Los Planes
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
           </Link>
         </div>
       </div>

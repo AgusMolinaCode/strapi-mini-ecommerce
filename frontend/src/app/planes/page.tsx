@@ -1,5 +1,6 @@
 import React from "react";
 import { ShoppingCart, Flame } from "lucide-react";
+import Link from "next/link";
 
 // Interfaz para los planes
 interface PlanFeature {
@@ -14,6 +15,7 @@ interface Plan {
   periodo: string;
   popular: boolean;
   features: string[];
+  features_full?: string[];
   paymentNote?: string;
 }
 
@@ -88,14 +90,21 @@ const getPeriodoTexto = (periodo: string): string => {
 };
 
 const PlanesPage = () => {
-  // Reorganizar: [Elite, Pro (popular), Básico]
+  // Reorganizar: [Básico, Pro (popular), Elite]
   const orderedPlans: Plan[] = [];
   const popularPlan = plans.find((p) => p.popular);
   const nonPopularPlans = plans.filter((p) => !p.popular);
 
-  if (nonPopularPlans.length > 0) orderedPlans.push(nonPopularPlans[0]); // Elite
-  if (popularPlan) orderedPlans.push(popularPlan); // Pro
-  if (nonPopularPlans.length > 1) orderedPlans.push(nonPopularPlans[1]); // Básico
+  // Básico (izquierda)
+  const basicoPlan = nonPopularPlans.find((p) => p.nombre === "Plan Básico");
+  if (basicoPlan) orderedPlans.push(basicoPlan);
+
+  // Pro en el medio (popular)
+  if (popularPlan) orderedPlans.push(popularPlan);
+
+  // Elite (derecha)
+  const elitePlan = nonPopularPlans.find((p) => p.nombre === "Plan Elite");
+  if (elitePlan) orderedPlans.push(elitePlan);
 
   return (
     <div className="w-full bg-gray-50 min-h-screen py-10 md:py-24 px-4">
@@ -180,8 +189,9 @@ const PlanesPage = () => {
                 <ul
                   className={`mb-8 flex-grow ${plan.popular ? "space-y-4" : "space-y-3.5"}`}
                 >
+                  {/* Feature items */}
                   {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-start">
+                    <li key={`feature-${index}`} className="flex items-start">
                       <span
                         className={`inline-block rounded-full border-2 border-red-500 mr-3 mt-0.5 flex-shrink-0 ${
                           plan.popular ? "w-6 h-6" : "w-5 h-5"
@@ -189,10 +199,28 @@ const PlanesPage = () => {
                       ></span>
                       <span
                         className={`text-gray-700 ${
-                          plan.popular ? "text-base" : "text-sm"
+                          plan.popular ? "text-xl" : "text-lg"
                         }`}
                       >
                         {feature}
+                      </span>
+                    </li>
+                  ))}
+
+                  {/* Feature_full items */}
+                  {plan.features_full && plan.features_full.map((featureFull, index) => (
+                    <li key={`feature-full-${index}`} className="flex items-start">
+                      <span
+                        className={`inline-block rounded-full border-2 border-red-500 mr-3 mt-0.5 flex-shrink-0 ${
+                          plan.popular ? "w-6 h-6" : "w-5 h-5"
+                        }`}
+                      ></span>
+                      <span
+                        className={`text-gray-700 ${
+                          plan.popular ? "text-xl" : "text-lg"
+                        }`}
+                      >
+                        {featureFull}
                       </span>
                     </li>
                   ))}
@@ -225,9 +253,11 @@ const PlanesPage = () => {
             Nuestro equipo está listo para asesorarte y encontrar el plan
             perfecto para tus objetivos
           </p>
-          <button className="px-8 py-4 bg-white text-gray-900 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-200 text-lg">
+          <Link href="https://wa.link/v0fsei" target="_blank" rel="noopener noreferrer" className="cursor-pointer">
+          <button className="px-8 py-4 bg-white text-gray-900 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-200 text-lg cursor-pointer">
             Contactar Asesor
           </button>
+          </Link>
         </div>
       </div>
     </div>

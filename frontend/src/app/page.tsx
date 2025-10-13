@@ -1,5 +1,6 @@
 import HeroSection from "@/components/hero/HeroSection";
 import PlanHeroSection from "@/components/planHeroSection/PlanHeroSection";
+import PremiumProducts from "@/components/premiumProducts/PremiumProducts";
 import { getStrapiData } from "@/data/actions/strapi";
 import { ProductosResponse, CategoriasResponse } from "@/lib/interface";
 import Image from "next/image";
@@ -17,6 +18,7 @@ export default async function Home() {
     <main>
       <HeroSection data={strapiData.data} />
       <PlanHeroSection />
+      <PremiumProducts />
       <div className="container mx-auto py-6">
         <h2 className="text-3xl font-bold mb-6">Categorías</h2>
         <div className="list-disc list-inside">
@@ -95,6 +97,7 @@ export default async function Home() {
           ))}
         </div>
       </div>
+
     </main>
   );
 }

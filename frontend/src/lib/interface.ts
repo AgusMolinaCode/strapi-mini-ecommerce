@@ -124,6 +124,11 @@ export interface PlanFeature {
   text: string;
 }
 
+export interface PlanFeatureFull {
+  id: number;
+  text: string;
+}
+
 export interface Plan {
   id: number;
   documentId: string;
@@ -131,7 +136,9 @@ export interface Plan {
   precio: number;
   periodo: string;
   popular: boolean | null;
+  plan_id: string;
   feature: PlanFeature[];
+  feature_full: PlanFeatureFull[];
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
