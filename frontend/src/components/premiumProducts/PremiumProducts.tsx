@@ -62,14 +62,23 @@ const PremiumProducts = async () => {
 
                 {/* Product Name */}
                 <h3 className="text-base md:text-xl lg:text-2xl text-gray-900 mb-4 md:mb-6 flex-grow">
-                  {producto.titulo}
+                  {producto.titulo.length > 40
+                    ? `${producto.titulo.substring(0, 40)}...`
+                    : producto.titulo}
                 </h3>
 
                 {/* Price and Button */}
                 <div className="flex items-center justify-between">
-                  <span className="text-xl md:text-3xl lg:text-4xl text-red-500">
-                    ${producto.precio}
-                  </span>
+                  <div className="flex flex-col gap-1">
+                    {producto.precio_anterior && producto.precio_anterior > producto.precio && (
+                      <span className="text-xl md:text-2xl text-gray-400 line-through">
+                        ${producto.precio_anterior}
+                      </span>
+                    )}
+                    <span className="text-3xl lg:text-4xl text-red-500 font-bold">
+                      ${producto.precio}
+                    </span>
+                  </div>
                   <button className="bg-red-500 text-white p-2.5 md:p-3 lg:p-4 rounded-full hover:bg-red-600 transition-colors duration-200">
                     <ShoppingBag className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
                   </button>
