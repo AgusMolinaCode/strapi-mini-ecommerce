@@ -12,6 +12,12 @@ const PremiumProducts = async () => {
   );
 
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+
+  // Handle empty or missing data
+  if (!dataProductos?.data || dataProductos.data.length === 0) {
+    return null;
+  }
+
   return (
     <div className="w-full bg-white py-16 md:py-24 px-4">
       <div className="max-w-7xl mx-auto">
@@ -34,7 +40,7 @@ const PremiumProducts = async () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-6 mb-12">
           {dataProductos.data.map((producto) => (
             <div
-              key={producto.id}
+              key={producto.documentId || producto.id}
               className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col"
             >
               {/* Image */}

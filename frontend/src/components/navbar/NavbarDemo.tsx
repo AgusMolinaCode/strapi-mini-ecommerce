@@ -49,10 +49,15 @@ export function NavbarDemo() {
         <MobileNav>
           <MobileNavHeader>
             <NavbarLogo />
-            <MobileNavToggle
-              isOpen={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            />
+            <div className="flex items-center gap-3 pr-2">
+              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                <IconShoppingCart className="h-6 w-6 text-black" />
+              </button>
+              <MobileNavToggle
+                isOpen={isMobileMenuOpen}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              />
+            </div>
           </MobileNavHeader>
 
           <MobileNavMenu
@@ -64,21 +69,11 @@ export function NavbarDemo() {
                 key={`mobile-link-${idx}`}
                 href={item.link}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-neutral-600 dark:text-neutral-300"
+                className="relative text-lg font-medium text-neutral-600 dark:text-neutral-300"
               >
                 <span className="block">{item.name}</span>
               </a>
             ))}
-            <div className="flex w-full flex-col gap-4">
-              <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full flex items-center justify-center gap-2"
-              >
-                <IconShoppingCart className="h-5 w-5" />
-                Carrito
-              </NavbarButton>
-            </div>
           </MobileNavMenu>
         </MobileNav>
       </Navbar>

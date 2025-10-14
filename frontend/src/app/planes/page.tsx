@@ -107,7 +107,7 @@ const PlanesPage = () => {
   if (elitePlan) orderedPlans.push(elitePlan);
 
   return (
-    <div className="w-full bg-gray-50 min-h-screen py-10 md:py-24 px-4">
+    <div className="w-full bg-gray-50 min-h-screen py-28 md:py-30 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
