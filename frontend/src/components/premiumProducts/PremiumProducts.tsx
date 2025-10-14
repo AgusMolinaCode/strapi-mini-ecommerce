@@ -1,51 +1,17 @@
 import React from "react";
 import { ShoppingBag, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { getStrapiData } from "@/data/actions/strapi";
+import { ProductosResponse } from "@/lib/interface";
+import Image from "next/image";
 
-interface Product {
-  id: number;
-  categoria: string;
-  nombre: string;
-  precio: number;
-  imagen: string;
-}
+const PremiumProducts = async () => {
+  // Fetch only featured products from Strapi
+  const dataProductos: ProductosResponse = await getStrapiData(
+    "/api/productos?populate=*&filters[destacado][$eq]=true"
+  );
 
-const products: Product[] = [
-  {
-    id: 1,
-    categoria: "suplementos",
-    nombre: "Creatina Monohidrato 300g",
-    precio: 3500,
-    imagen:
-      "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=400&fit=crop",
-  },
-  {
-    id: 2,
-    categoria: "accesorios",
-    nombre: "Botella Térmica 750ml",
-    precio: 1800,
-    imagen:
-      "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=400&fit=crop",
-  },
-  {
-    id: 3,
-    categoria: "suplementos",
-    nombre: "Proteína Whey Premium 2kg",
-    precio: 8900,
-    imagen:
-      "https://images.unsplash.com/photo-1579722821273-0f6c7d44362f?w=400&h=400&fit=crop",
-  },
-  {
-    id: 4,
-    categoria: "ropa",
-    nombre: "Remera Dry-Fit Premium",
-    precio: 2800,
-    imagen:
-      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop",
-  },
-];
-
-const PremiumProducts = () => {
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
   return (
     <div className="w-full bg-white py-16 md:py-24 px-4">
       <div className="max-w-7xl mx-auto">
@@ -66,36 +32,43 @@ const PremiumProducts = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-6 mb-12">
-          {products.map((product) => (
+          {dataProductos.data.map((producto) => (
             <div
-              key={product.id}
+              key={producto.id}
               className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col"
             >
               {/* Image */}
               <div className="relative h-48 md:h-72 lg:h-80 bg-gray-100 overflow-hidden">
-                <img
-                  src={product.imagen}
-                  alt={product.nombre}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                />
+                {producto.imagenes && producto.imagenes.length > 0 ? (
+                  <Image
+                    src={`${baseUrl}${producto.imagenes[0].url}`}
+                    alt={producto.imagenes[0].alternativeText || producto.titulo}
+                    fill
+                    className="object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                    Sin imagen
+                  </div>
+                )}
               </div>
 
               {/* Content */}
               <div className="p-4 md:p-6 lg:p-8 flex flex-col flex-grow">
                 {/* Category */}
                 <span className="text-xs md:text-sm uppercase tracking-wide text-gray-500 mb-2 md:mb-3">
-                  {product.categoria}
+                  {producto.categoria?.nombre || "Sin categoría"}
                 </span>
 
                 {/* Product Name */}
                 <h3 className="text-base md:text-xl lg:text-2xl text-gray-900 mb-4 md:mb-6 flex-grow">
-                  {product.nombre}
+                  {producto.titulo}
                 </h3>
 
                 {/* Price and Button */}
                 <div className="flex items-center justify-between">
                   <span className="text-xl md:text-3xl lg:text-4xl text-red-500">
-                    ${product.precio}
+                    ${producto.precio}
                   </span>
                   <button className="bg-red-500 text-white p-2.5 md:p-3 lg:p-4 rounded-full hover:bg-red-600 transition-colors duration-200">
                     <ShoppingBag className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
