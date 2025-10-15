@@ -23,7 +23,7 @@ export default async function Home() {
         <h2 className="text-3xl font-bold mb-6">Categorías</h2>
         <div className="list-disc list-inside">
           {dataCategorias.data.map((categoria) => (
-            <div key={categoria.id} className="mb-6" >
+            <div key={categoria.id} className="mb-6">
               <div key={categoria.id}>{categoria.nombre}</div>
               {categoria.imagen && (
                 <div key={categoria.slug} className="relative w-3xl h-32 mb-4">
@@ -97,7 +97,6 @@ export default async function Home() {
           ))}
         </div>
       </div>
-
     </main>
   );
 }
