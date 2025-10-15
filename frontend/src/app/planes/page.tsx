@@ -1,82 +1,16 @@
 import React from "react";
 import { ShoppingCart, Flame } from "lucide-react";
 import Link from "next/link";
+import { getPlans } from "@/data/actions/strapi";
+import type { Plan } from "@/lib/interface";
 
-// Interfaz para los planes
-interface PlanFeature {
-  id: number;
-  text: string;
-}
-
-interface Plan {
-  id: number;
-  nombre: string;
-  precio: number;
-  periodo: string;
-  popular: boolean;
-  features: string[];
-  features_full?: string[];
-  paymentNote?: string;
-}
-
-const plans: Plan[] = [
-  {
-    id: 1,
-    nombre: "Plan Elite",
-    precio: 42000,
-    periodo: "anual",
-    popular: false,
-    paymentNote: "Pago anual",
-    features: [
-      "Todo del Plan Pro",
-      "4 sesiones de entrenamiento personal/mes",
-      "Plan nutricional personalizado",
-      "Acceso 24/7 al gimnasio",
-      "Clases premium exclusivas",
-      "Evaluaciones físicas mensuales",
-      "Invitación para 1 acompañante",
-      "25% descuento en tienda",
-    ],
-  },
-  {
-    id: 2,
-    nombre: "Plan Pro",
-    precio: 11900,
-    periodo: "trimestral",
-    popular: true,
-    paymentNote: "Pago cada 3 meses",
-    features: [
-      "Todo del Plan Básico",
-      "Clases grupales ilimitadas",
-      "1 sesión de entrenamiento personal",
-      "Asesoramiento nutricional básico",
-      "Acceso a zona funcional",
-      "15% descuento en tienda",
-    ],
-  },
-  {
-    id: 3,
-    nombre: "Plan Básico",
-    precio: 4500,
-    periodo: "mensual",
-    popular: false,
-    paymentNote: "Pago mes a mes",
-    features: [
-      "Acceso ilimitado al gimnasio",
-      "Vestuarios y duchas",
-      "Área de cardio y pesas",
-      "App de seguimiento fitness",
-    ],
-  },
-];
-
-const getEstiloBoton = (popular: boolean): string => {
+const getEstiloBoton = (popular: boolean | null): string => {
   return popular
     ? "bg-red-500 text-white hover:bg-red-600"
     : "bg-gray-900 text-white hover:bg-gray-800";
 };
 
-const getEstiloBorde = (popular: boolean): string => {
+const getEstiloBorde = (popular: boolean | null): string => {
   return popular ? "border-red-500" : "border-gray-200";
 };
 
@@ -89,7 +23,19 @@ const getPeriodoTexto = (periodo: string): string => {
   return periodos[periodo] || `/${periodo}`;
 };
 
-const PlanesPage = () => {
+const getPaymentNote = (periodo: string): string => {
+  const notes: Record<string, string> = {
+    mensual: "Pago mes a mes",
+    trimestral: "Pago cada 3 meses",
+    anual: "Pago anual",
+  };
+  return notes[periodo] || "";
+};
+
+const PlanesPage = async () => {
+  const response = await getPlans();
+  const plans: Plan[] = response?.data || [];
+
   // Reorganizar: [Básico, Pro (popular), Elite]
   const orderedPlans: Plan[] = [];
   const popularPlan = plans.find((p) => p.popular);
@@ -179,9 +125,9 @@ const PlanesPage = () => {
                 </div>
 
                 {/* Payment Note */}
-                {plan.paymentNote && (
+                {getPaymentNote(plan.periodo) && (
                   <p className="text-gray-500 text-sm mb-6">
-                    {plan.paymentNote}
+                    {getPaymentNote(plan.periodo)}
                   </p>
                 )}
 
@@ -190,8 +136,8 @@ const PlanesPage = () => {
                   className={`mb-8 flex-grow ${plan.popular ? "space-y-4" : "space-y-3.5"}`}
                 >
                   {/* Feature items */}
-                  {plan.features.map((feature, index) => (
-                    <li key={`feature-${index}`} className="flex items-start">
+                  {plan.feature?.map((feature) => (
+                    <li key={feature.id} className="flex items-start">
                       <span
                         className={`inline-block rounded-full border-2 border-red-500 mr-3 mt-0.5 flex-shrink-0 ${
                           plan.popular ? "w-6 h-6" : "w-5 h-5"
@@ -202,14 +148,14 @@ const PlanesPage = () => {
                           plan.popular ? "text-xl" : "text-lg"
                         }`}
                       >
-                        {feature}
+                        {feature.text}
                       </span>
                     </li>
                   ))}
 
                   {/* Feature_full items */}
-                  {plan.features_full && plan.features_full.map((featureFull, index) => (
-                    <li key={`feature-full-${index}`} className="flex items-start">
+                  {plan.feature_full?.map((featureFull) => (
+                    <li key={featureFull.id} className="flex items-start">
                       <span
                         className={`inline-block rounded-full border-2 border-red-500 mr-3 mt-0.5 flex-shrink-0 ${
                           plan.popular ? "w-6 h-6" : "w-5 h-5"
@@ -220,7 +166,7 @@ const PlanesPage = () => {
                           plan.popular ? "text-xl" : "text-lg"
                         }`}
                       >
-                        {featureFull}
+                        {featureFull.text}
                       </span>
                     </li>
                   ))}
