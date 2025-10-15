@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Read(//c/Users/urano/OneDrive/Escritorio/**)",
-      "mcp__sequential-thinking__sequentialthinking"
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(npm run build)"
     ],
     "deny": [],
     "ask": []

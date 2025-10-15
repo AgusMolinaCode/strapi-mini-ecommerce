@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { getStrapiData } from '@/data/actions/strapi';
 import { Producto, ProductosResponse } from '@/lib/interface';
 import { extractProductId, isValidSlug } from '@/utils/slugify';
+import ProductImageGallery from '@/components/product/ProductImageGallery';
+import RelatedProducts from '@/components/product/RelatedProducts';
 
 const ProductPage = () => {
   const params = useParams();
@@ -85,91 +86,77 @@ const ProductPage = () => {
     );
   }
 
-  const mainImage = product.imagenes && product.imagenes.length > 0
-    ? `${baseUrl}${product.imagenes[0].url}`
-    : '/placeholder-product.jpg';
-
   const handleAddToCart = () => {
     // TODO: Implement cart functionality
     console.log(`Adding ${quantity} of ${product.titulo} to cart`);
   };
 
   return (
-    <div className="min-h-screen bg-white p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className=" bg-white px-4 py-28 md:py-30 md:px-8 lg:px-12">
+      <div className="max-w-7xl mx-auto">
         {/* Back Button */}
-        <button
-          onClick={() => router.back()}
-          className="flex items-center gap-2 mb-6 text-gray-700 hover:text-gray-900 transition-colors"
-        >
-          <span>←</span>
-          <span>Volver a la tienda</span>
-        </button>
+        
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Product Image */}
-          <div className="bg-gray-100 rounded-lg overflow-hidden relative h-96 md:h-[600px]">
-            <Image
-              src={mainImage}
-              alt={product.imagenes?.[0]?.alternativeText || product.titulo}
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          {/* Product Image Gallery */}
+          <ProductImageGallery
+            images={product.imagenes || []}
+            productTitle={product.titulo}
+            baseUrl={baseUrl}
+          />
 
           {/* Product Details */}
           <div className="flex flex-col">
             {/* Category Badge */}
             {product.categoria && (
-              <span className="inline-block bg-black text-white text-sm px-4 py-1 rounded-full w-fit mb-4">
+              <span className="inline-block bg-black text-white text-base md:text-lg px-5 py-2 rounded-full w-fit mb-6">
                 {product.categoria.nombre}
               </span>
             )}
 
             {/* Product Title */}
-            <h1 className="text-4xl font-bold mb-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
               {product.titulo}
             </h1>
 
             {/* Price */}
-            <div className="mb-6">
+            <div className="mb-8">
               {product.precio_anterior && product.precio_anterior > product.precio && (
-                <p className="text-2xl text-gray-400 line-through">
+                <p className="text-2xl md:text-3xl text-gray-400 line-through mb-2">
                   ${product.precio_anterior}
                 </p>
               )}
-              <p className="text-5xl font-bold text-red-500">
+              <p className="text-5xl md:text-6xl lg:text-7xl font-bold text-red-500">
                 ${product.precio}
               </p>
             </div>
 
             {/* Description */}
-            <p className="text-gray-600 mb-6">
+            <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
               {product.descripcion}
             </p>
 
             {/* Stock Info */}
-            <p className="text-sm text-gray-700 mb-4">
-              Stock disponible: {product.stock} unidades
+            <p className="text-base md:text-lg text-gray-700 mb-6">
+              Stock disponible: <span className="font-semibold">{product.stock}</span> unidades
             </p>
 
             {/* Quantity Selector */}
-            <div className="flex items-center gap-4 mb-6">
-              <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="flex items-center border-2 border-gray-300 rounded-xl overflow-hidden">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="px-4 py-2 hover:bg-gray-100 transition-colors"
+                  className="px-5 py-3 md:px-6 md:py-4 text-xl md:text-2xl hover:bg-gray-100 transition-colors"
                   disabled={quantity <= 1}
                 >
                   −
                 </button>
-                <span className="px-6 py-2 border-x border-gray-300">
+                <span className="px-8 py-3 md:px-10 md:py-4 text-xl md:text-2xl font-semibold border-x-2 border-gray-300">
                   {quantity}
                 </span>
                 <button
                   onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                  className="px-4 py-2 hover:bg-gray-100 transition-colors"
+                  className="px-5 py-3 md:px-6 md:py-4 text-xl md:text-2xl hover:bg-gray-100 transition-colors"
                   disabled={quantity >= product.stock}
                 >
                   +
@@ -181,9 +168,9 @@ const ProductPage = () => {
             <button
               onClick={handleAddToCart}
               disabled={product.stock === 0}
-              className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-4 px-6 rounded-lg flex items-center justify-center gap-2 mb-8 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="w-full bg-red-500 hover:bg-red-600 text-white text-xl md:text-2xl lg:text-3xl py-2 md:py-3 px-8 rounded-xl flex items-center justify-center gap-4 mb-10 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed shadow-lg hover:shadow-xl cursor-pointer"
             >
-              <span>🛒</span>
+              {/* <span className="text-3xl md:text-4xl">🛒</span> */}
               <span>
                 {product.stock === 0
                   ? 'Sin stock'
@@ -193,22 +180,30 @@ const ProductPage = () => {
             </button>
 
             {/* Features */}
-            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-gray-200">
+            <div className="grid grid-cols-3 gap-6 pt-8 border-t-2 border-gray-200">
               <div className="flex flex-col items-center text-center">
-                <span className="text-2xl mb-2">✓</span>
-                <span className="text-sm text-gray-700">Envío Gratis</span>
+                <span className="text-3xl md:text-4xl mb-3">✓</span>
+                <span className="text-sm md:text-base lg:text-lg font-medium text-gray-700">Envío Gratis</span>
               </div>
               <div className="flex flex-col items-center text-center">
-                <span className="text-2xl mb-2">✓</span>
-                <span className="text-sm text-gray-700">Garantía</span>
+                <span className="text-3xl md:text-4xl mb-3">✓</span>
+                <span className="text-sm md:text-base lg:text-lg font-medium text-gray-700">Garantía</span>
               </div>
               <div className="flex flex-col items-center text-center">
-                <span className="text-2xl mb-2">✓</span>
-                <span className="text-sm text-gray-700">Calidad Premium</span>
+                <span className="text-3xl md:text-4xl mb-3">✓</span>
+                <span className="text-sm md:text-base lg:text-lg font-medium text-gray-700">Calidad Premium</span>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Related Products Carousel */}
+        {product.categoria && (
+          <RelatedProducts
+            categoryId={product.categoria.id}
+            currentProductId={product.id}
+          />
+        )}
       </div>
     </div>
   );
