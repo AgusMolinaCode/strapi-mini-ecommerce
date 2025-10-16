@@ -33,9 +33,9 @@
     },
     "productos": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "manyToMany",
       "target": "api::producto.producto",
-      "mappedBy": "categoria"
+      "mappedBy": "categorias"
     }
   }
 }

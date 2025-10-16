@@ -253,7 +253,7 @@ const ProductPage = () => {
         {/* Related Products Carousel */}
         {product.categoria && (
           <RelatedProducts
-            categoryId={product.categoria.id}
+            categoria={product.categoria}
             currentProductId={product.id}
           />
         )}

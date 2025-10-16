@@ -453,7 +453,10 @@ export interface ApiCategoriaCategoria extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     nombre: Schema.Attribute.String;
-    productos: Schema.Attribute.Relation<'oneToMany', 'api::producto.producto'>;
+    productos: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::producto.producto'
+    >;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'nombre'>;
     updatedAt: Schema.Attribute.DateTime;
@@ -537,8 +540,8 @@ export interface ApiProductoProducto extends Struct.CollectionTypeSchema {
   };
   attributes: {
     activo: Schema.Attribute.Boolean;
-    categoria: Schema.Attribute.Relation<
-      'manyToOne',
+    categorias: Schema.Attribute.Relation<
+      'manyToMany',
       'api::categoria.categoria'
     >;
     createdAt: Schema.Attribute.DateTime;

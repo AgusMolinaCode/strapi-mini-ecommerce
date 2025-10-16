@@ -49,9 +49,9 @@
     "activo": {
       "type": "boolean"
     },
-    "categoria": {
+    "categorias": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "manyToMany",
       "target": "api::categoria.categoria",
       "inversedBy": "productos"
     }

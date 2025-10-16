@@ -4,16 +4,16 @@ import React, { useState, useEffect, useCallback } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getStrapiData } from '@/data/actions/strapi';
-import { ProductosResponse, Producto } from '@/lib/interface';
+import { ProductosResponse, Producto, Categoria } from '@/lib/interface';
 import ProductCard from './ProductCard';
 
 interface RelatedProductsProps {
-  categoryId: number;
+  categoria: Categoria;
   currentProductId: number;
 }
 
 const RelatedProducts: React.FC<RelatedProductsProps> = ({
-  categoryId,
+  categoria,
   currentProductId,
 }) => {
   const [relatedProducts, setRelatedProducts] = useState<Producto[]>([]);
@@ -34,24 +34,44 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
   useEffect(() => {
     async function fetchRelatedProducts() {
       try {
-        const data: ProductosResponse = await getStrapiData(
-          `/api/productos?populate=*&filters[categoria][id][$eq]=${categoryId}&filters[id][$ne]=${currentProductId}&filters[activo][$eq]=true`
-        );
+        console.log('🔍 RelatedProducts - Categoria:', categoria);
+        console.log('🔍 RelatedProducts - Current Product ID:', currentProductId);
+
+        // Ignore "Todos" category - don't show related products
+        if (categoria.slug.toLowerCase() === 'todos' || categoria.nombre.toLowerCase() === 'todos') {
+          console.log('⚠️ RelatedProducts - Categoria "Todos" detectada, no se mostrarán productos');
+          setRelatedProducts([]);
+          setLoading(false);
+          return;
+        }
+
+        const query = `/api/productos?populate=*&filters[categoria][id][$eq]=${categoria.id}&filters[id][$ne]=${currentProductId}&filters[activo][$eq]=true`;
+        console.log('🔍 RelatedProducts - Query:', query);
+
+        const data: ProductosResponse = await getStrapiData(query);
+
+        console.log('✅ RelatedProducts - Data received:', data);
+        console.log('✅ RelatedProducts - Products count:', data?.data?.length || 0);
 
         if (data?.data && data.data.length > 0) {
           setRelatedProducts(data.data);
+        } else {
+          console.log('⚠️ RelatedProducts - No products found');
         }
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching related products:', error);
+        console.error('❌ Error fetching related products:', error);
         setLoading(false);
       }
     }
 
-    if (categoryId) {
+    if (categoria && categoria.id) {
+      console.log('🚀 RelatedProducts - Starting fetch...');
       fetchRelatedProducts();
+    } else {
+      console.log('⚠️ RelatedProducts - No categoria or categoria.id');
     }
-  }, [categoryId, currentProductId]);
+  }, [categoria, currentProductId]);
 
   // Navigation handlers
   const scrollPrev = useCallback(() => {

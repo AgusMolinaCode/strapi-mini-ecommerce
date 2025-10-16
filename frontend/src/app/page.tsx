@@ -24,9 +24,9 @@ export default async function Home() {
         <div className="list-disc list-inside">
           {dataCategorias.data.map((categoria) => (
             <div key={categoria.id} className="mb-6">
-              <div key={categoria.id}>{categoria.nombre}</div>
+              <div>{categoria.nombre}</div>
               {categoria.imagen && (
-                <div key={categoria.slug} className="relative w-3xl h-32 mb-4">
+                <div className="relative w-3xl h-32 mb-4">
                   <Image
                     src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${categoria.imagen.url}`}
                     alt={categoria.imagen.alternativeText || categoria.nombre}
