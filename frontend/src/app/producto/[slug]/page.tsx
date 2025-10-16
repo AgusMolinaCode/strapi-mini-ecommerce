@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { getStrapiData } from '@/data/actions/strapi';
 import { Producto, ProductosResponse } from '@/lib/interface';
-import { extractProductId, isValidSlug } from '@/utils/slugify';
 import ProductImageGallery from '@/components/product/ProductImageGallery';
 import RelatedProducts from '@/components/product/RelatedProducts';
+import { Mail, Phone, MessageCircle } from 'lucide-react';
 
 const ProductPage = () => {
   const params = useParams();
@@ -23,19 +23,16 @@ const ProductPage = () => {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        // Validate slug format
-        if (!isValidSlug(slug)) {
+        // Validate slug exists
+        if (!slug || typeof slug !== 'string') {
           setError(true);
           setLoading(false);
           return;
         }
 
-        // Extract ID from slug
-        const productId = extractProductId(slug);
-
-        // Fetch product data from Strapi using numeric ID
+        // Fetch product data from Strapi using slug
         const data: ProductosResponse = await getStrapiData(
-          `/api/productos?populate=*&filters[id][$eq]=${productId}`
+          `/api/productos?populate=*&filters[slug][$eq]=${slug}`
         );
 
         if (!data?.data || data.data.length === 0) {
@@ -91,11 +88,16 @@ const ProductPage = () => {
     console.log(`Adding ${quantity} of ${product.titulo} to cart`);
   };
 
+  // Check if product is inactive or out of stock
+  const isInactive = product.activo !== true;
+  const isOutOfStock = product.stock === 0;
+  const showUnavailableMessage = isInactive || isOutOfStock;
+
   return (
     <div className=" bg-white px-4 py-28 md:py-30 md:px-8 lg:px-12">
       <div className="max-w-7xl mx-auto">
         {/* Back Button */}
-        
+
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Product Image Gallery */}
@@ -121,13 +123,13 @@ const ProductPage = () => {
 
             {/* Price */}
             <div className="mb-8">
-              {product.precio_anterior && product.precio_anterior > product.precio && (
+              {product.en_oferta === true && product.precio_anterior && product.precio_anterior > product.precio && (
                 <p className="text-2xl md:text-3xl text-gray-400 line-through mb-2">
-                  ${product.precio_anterior}
+                  ${product.precio_anterior.toLocaleString()}
                 </p>
               )}
               <p className="text-5xl md:text-6xl lg:text-7xl font-bold text-red-500">
-                ${product.precio}
+                ${product.precio.toLocaleString()}
               </p>
             </div>
 
@@ -136,48 +138,113 @@ const ProductPage = () => {
               {product.descripcion}
             </p>
 
-            {/* Stock Info */}
-            <p className="text-base md:text-lg text-gray-700 mb-6">
-              Stock disponible: <span className="font-semibold">{product.stock}</span> unidades
-            </p>
+            {/* Unavailable Message (Inactive or Out of Stock) */}
+            {showUnavailableMessage ? (
+              <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-2xl p-6 md:p-8 mb-8">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="bg-amber-500 text-white p-3 rounded-full">
+                    <MessageCircle className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
+                      {isInactive ? 'Producto No Disponible' : 'Producto Agotado'}
+                    </h3>
+                    <p className="text-base md:text-lg text-gray-700 mb-4">
+                      {isInactive
+                        ? 'Este producto actualmente no está disponible para la venta.'
+                        : 'Lo sentimos, este producto está temporalmente agotado.'}
+                    </p>
+                    <p className="text-base text-gray-600 mb-4">
+                      ¿Interesado en este producto? Contáctanos y te ayudaremos:
+                    </p>
+                  </div>
+                </div>
 
-            {/* Quantity Selector */}
-            <div className="flex items-center gap-4 mb-8">
-              <div className="flex items-center border-2 border-gray-300 rounded-xl overflow-hidden">
-                <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="px-5 py-3 md:px-6 md:py-4 text-xl md:text-2xl hover:bg-gray-100 transition-colors"
-                  disabled={quantity <= 1}
-                >
-                  −
-                </button>
-                <span className="px-8 py-3 md:px-10 md:py-4 text-xl md:text-2xl font-semibold border-x-2 border-gray-300">
-                  {quantity}
-                </span>
-                <button
-                  onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                  className="px-5 py-3 md:px-6 md:py-4 text-xl md:text-2xl hover:bg-gray-100 transition-colors"
-                  disabled={quantity >= product.stock}
-                >
-                  +
-                </button>
+                {/* Contact Options */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <a
+                    href="mailto:contacto@fitpro.com"
+                    className="flex items-center gap-3 bg-white hover:bg-gray-50 border-2 border-amber-300 rounded-xl p-4 transition-all duration-200 hover:shadow-md group"
+                  >
+                    <div className="bg-amber-100 text-amber-600 p-2 rounded-lg group-hover:bg-amber-200 transition-colors">
+                      <Mail className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Email</p>
+                      <p className="text-sm font-semibold text-gray-900">Enviar mensaje</p>
+                    </div>
+                  </a>
+
+                  <a
+                    href="tel:+1234567890"
+                    className="flex items-center gap-3 bg-white hover:bg-gray-50 border-2 border-amber-300 rounded-xl p-4 transition-all duration-200 hover:shadow-md group"
+                  >
+                    <div className="bg-amber-100 text-amber-600 p-2 rounded-lg group-hover:bg-amber-200 transition-colors">
+                      <Phone className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Teléfono</p>
+                      <p className="text-sm font-semibold text-gray-900">Llamar ahora</p>
+                    </div>
+                  </a>
+
+                  <a
+                    href="https://wa.me/1234567890"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 bg-white hover:bg-gray-50 border-2 border-amber-300 rounded-xl p-4 transition-all duration-200 hover:shadow-md group"
+                  >
+                    <div className="bg-amber-100 text-amber-600 p-2 rounded-lg group-hover:bg-amber-200 transition-colors">
+                      <MessageCircle className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">WhatsApp</p>
+                      <p className="text-sm font-semibold text-gray-900">Chat directo</p>
+                    </div>
+                  </a>
+                </div>
               </div>
-            </div>
+            ) : (
+              <>
+                {/* Stock Info */}
+                <p className="text-base md:text-lg text-gray-700 mb-6">
+                  Stock disponible: <span className="font-semibold">{product.stock}</span> unidades
+                </p>
 
-            {/* Add to Cart Button */}
-            <button
-              onClick={handleAddToCart}
-              disabled={product.stock === 0}
-              className="w-full bg-red-500 hover:bg-red-600 text-white text-xl md:text-2xl lg:text-3xl py-2 md:py-3 px-8 rounded-xl flex items-center justify-center gap-4 mb-10 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed shadow-lg hover:shadow-xl cursor-pointer"
-            >
-              {/* <span className="text-3xl md:text-4xl">🛒</span> */}
-              <span>
-                {product.stock === 0
-                  ? 'Sin stock'
-                  : `Agregar al Carrito - $${(product.precio * quantity).toFixed(2)}`
-                }
-              </span>
-            </button>
+                {/* Quantity Selector */}
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="flex items-center border-2 border-gray-300 rounded-xl overflow-hidden">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="px-5 py-3 md:px-6 md:py-4 text-xl md:text-2xl hover:bg-gray-100 transition-colors"
+                      disabled={quantity <= 1}
+                    >
+                      −
+                    </button>
+                    <span className="px-8 py-3 md:px-10 md:py-4 text-xl md:text-2xl font-semibold border-x-2 border-gray-300">
+                      {quantity}
+                    </span>
+                    <button
+                      onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                      className="px-5 py-3 md:px-6 md:py-4 text-xl md:text-2xl hover:bg-gray-100 transition-colors"
+                      disabled={quantity >= product.stock}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                {/* Add to Cart Button */}
+                <button
+                  onClick={handleAddToCart}
+                  className="w-full bg-red-500 hover:bg-red-600 text-white text-xl md:text-2xl lg:text-3xl py-2 md:py-3 px-8 rounded-xl flex items-center justify-center gap-4 mb-10 transition-colors shadow-lg hover:shadow-xl cursor-pointer"
+                >
+                  <span>
+                    Agregar al Carrito - ${(product.precio * quantity).toLocaleString()}
+                  </span>
+                </button>
+              </>
+            )}
 
             {/* Features */}
             <div className="grid grid-cols-3 gap-6 pt-8 border-t-2 border-gray-200">

@@ -1,13 +1,11 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
-import { ChevronLeft, ChevronRight, ShoppingBag } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getStrapiData } from '@/data/actions/strapi';
 import { ProductosResponse, Producto } from '@/lib/interface';
-import { generateProductSlug } from '@/utils/slugify';
+import ProductCard from './ProductCard';
 
 interface RelatedProductsProps {
   categoryId: number;
@@ -37,7 +35,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
     async function fetchRelatedProducts() {
       try {
         const data: ProductosResponse = await getStrapiData(
-          `/api/productos?populate=*&filters[categoria][id][$eq]=${categoryId}&filters[id][$ne]=${currentProductId}`
+          `/api/productos?populate=*&filters[categoria][id][$eq]=${categoryId}&filters[id][$ne]=${currentProductId}&filters[activo][$eq]=true`
         );
 
         if (data?.data && data.data.length > 0) {
@@ -120,70 +118,14 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
           {/* Carousel */}
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex gap-4 md:gap-6">
-              {relatedProducts.map((producto) => {
-                const productSlug = generateProductSlug(producto.titulo, producto.id);
-
-                return (
-                  <div
-                    key={producto.id}
-                    className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] xl:flex-[0_0_23%] min-w-0"
-                  >
-                    <Link
-                      href={`/producto/${productSlug}`}
-                      className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"
-                    >
-                      {/* Image */}
-                      <div className="relative h-48 md:h-64 lg:h-72 bg-gray-100 overflow-hidden">
-                        {producto.imagenes && producto.imagenes.length > 0 ? (
-                          <Image
-                            src={`${baseUrl}${producto.imagenes[0].url}`}
-                            alt={producto.imagenes[0].alternativeText || producto.titulo}
-                            fill
-                            className="object-cover hover:scale-105 transition-transform duration-300"
-                            loading="lazy"
-                            sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 30vw"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-400">
-                            Sin imagen
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-4 md:p-6 flex flex-col flex-grow">
-                        {/* Category */}
-                        <span className="text-xs md:text-sm uppercase tracking-wide text-gray-500 mb-2">
-                          {producto.categoria?.nombre || 'Sin categoría'}
-                        </span>
-
-                        {/* Product Name */}
-                        <h3 className="text-base md:text-lg lg:text-xl text-gray-900 mb-4 flex-grow line-clamp-2">
-                          {producto.titulo}
-                        </h3>
-
-                        {/* Price and Button */}
-                        <div className="flex items-center justify-between">
-                          <div className="flex flex-col gap-1">
-                            {producto.precio_anterior &&
-                              producto.precio_anterior > producto.precio && (
-                                <span className="text-sm md:text-base text-gray-400 line-through">
-                                  ${producto.precio_anterior.toLocaleString()}
-                                </span>
-                              )}
-                            <span className="text-2xl md:text-3xl text-red-500 font-bold">
-                              ${producto.precio.toLocaleString()}
-                            </span>
-                          </div>
-                          <button className="bg-red-500 text-white p-2.5 md:p-3 rounded-full hover:bg-red-600 transition-colors duration-200">
-                            <ShoppingBag className="w-4 h-4 md:w-5 md:h-5" />
-                          </button>
-                        </div>
-                      </div>
-                    </Link>
-                  </div>
-                );
-              })}
+              {relatedProducts.map((producto) => (
+                <div
+                  key={producto.id}
+                  className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_30%] xl:flex-[0_0_23%] min-w-0"
+                >
+                  <ProductCard producto={producto} baseUrl={baseUrl} />
+                </div>
+              ))}
             </div>
           </div>
 
