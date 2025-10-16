@@ -246,21 +246,7 @@ const ProductPage = () => {
               </>
             )}
 
-            {/* Features */}
-            <div className="grid grid-cols-3 gap-6 pt-8 border-t-2 border-gray-200">
-              <div className="flex flex-col items-center text-center">
-                <span className="text-3xl md:text-4xl mb-3">✓</span>
-                <span className="text-sm md:text-base lg:text-lg font-medium text-gray-700">Envío Gratis</span>
-              </div>
-              <div className="flex flex-col items-center text-center">
-                <span className="text-3xl md:text-4xl mb-3">✓</span>
-                <span className="text-sm md:text-base lg:text-lg font-medium text-gray-700">Garantía</span>
-              </div>
-              <div className="flex flex-col items-center text-center">
-                <span className="text-3xl md:text-4xl mb-3">✓</span>
-                <span className="text-sm md:text-base lg:text-lg font-medium text-gray-700">Calidad Premium</span>
-              </div>
-            </div>
+            
           </div>
         </div>
 
