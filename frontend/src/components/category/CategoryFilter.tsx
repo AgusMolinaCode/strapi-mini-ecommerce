@@ -35,10 +35,10 @@ const CategoryFilter = ({
   const sortedCategories = [todosCategory, ...otherCategories];
 
   return (
-    <div className="w-full bg-white py-6 md:py-8 px-4 border-b border-gray-200">
+    <div className="w-full bg-white py-8 md:py-10 px-4 border-b border-gray-200">
       <div className="max-w-7xl mx-auto">
         {/* Scrollable container */}
-        <div className="flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto py-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {sortedCategories.map((categoria) => {
             const isActive = activeSlug === categoria.slug;
 
