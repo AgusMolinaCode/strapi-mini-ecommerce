@@ -19,13 +19,14 @@ export default async function Home() {
     <main>
       <HeroSection data={strapiData.data} />
       <PlanHeroSection />
-      <PremiumProducts />
-
       {/* Category Filter */}
-      <CategoryFilter
-        categorias={dataCategorias.data}
-        activeSlug="todos"
-      />
+      <div className="max-w-7xl mx-auto px-4 pt-12">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
+          Categorias
+        </h2>
+      </div>
+      <CategoryFilter categorias={dataCategorias.data} activeSlug="todos" />
+      <PremiumProducts />
 
       <div className="container mx-auto py-6 mt-12">
         <h2 className="text-3xl font-bold mb-6">Productos</h2>

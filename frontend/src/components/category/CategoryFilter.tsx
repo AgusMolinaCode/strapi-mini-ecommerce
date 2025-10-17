@@ -35,10 +35,10 @@ const CategoryFilter = ({
   const sortedCategories = [todosCategory, ...otherCategories];
 
   return (
-    <div className="w-full bg-white py-8 md:py-10 px-4 border-b border-gray-200">
+    <div className="w-full bg-white py-8 md:py-10 px-4 ">
       <div className="max-w-7xl mx-auto">
         {/* Scrollable container */}
-        <div className="flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto py-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex gap-4 md:gap-6 lg:gap-8">
           {sortedCategories.map((categoria) => {
             const isActive = activeSlug === categoria.slug;
 
@@ -51,7 +51,7 @@ const CategoryFilter = ({
                 {/* Category Image Circle */}
                 <div
                   className={`
-                    relative w-20 h-20 md:w-28 md:h-28 lg:w-32 lg:h-32
+                    relative w-24 h-24 md:w-36 md:h-36 lg:w-40 lg:h-40
                     rounded-full overflow-hidden border-2
                     transition-all duration-300
                     ${isActive
@@ -66,7 +66,7 @@ const CategoryFilter = ({
                       alt={categoria.imagen.alternativeText || categoria.nombre}
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-300"
-                      sizes="(max-width: 768px) 80px, (max-width: 1024px) 112px, 128px"
+                      sizes="(max-width: 768px) 96px, (max-width: 1024px) 144px, 160px"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
@@ -80,8 +80,8 @@ const CategoryFilter = ({
                 {/* Category Name */}
                 <span
                   className={`
-                    text-xs md:text-sm lg:text-base font-medium text-center
-                    max-w-[80px] md:max-w-[100px] truncate
+                    text-sm md:text-base lg:text-lg font-medium text-center
+                    max-w-[96px] md:max-w-[144px] lg:max-w-[160px] truncate
                     transition-colors duration-300
                     ${isActive
                       ? 'text-red-500 font-semibold'
