@@ -51,8 +51,8 @@ const CategoryFilter = ({
                 {/* Category Image Circle */}
                 <div
                   className={`
-                    relative w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24
-                    rounded-full overflow-hidden border-4
+                    relative w-20 h-20 md:w-28 md:h-28 lg:w-32 lg:h-32
+                    rounded-full overflow-hidden border-2
                     transition-all duration-300
                     ${isActive
                       ? 'border-red-500 shadow-lg scale-105'
@@ -66,11 +66,11 @@ const CategoryFilter = ({
                       alt={categoria.imagen.alternativeText || categoria.nombre}
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-300"
-                      sizes="(max-width: 768px) 64px, (max-width: 1024px) 80px, 96px"
+                      sizes="(max-width: 768px) 80px, (max-width: 1024px) 112px, 128px"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center">
-                      <span className="text-white text-2xl md:text-3xl font-bold">
+                      <span className="text-white text-3xl md:text-4xl lg:text-5xl font-bold">
                         {categoria.nombre.charAt(0).toUpperCase()}
                       </span>
                     </div>
