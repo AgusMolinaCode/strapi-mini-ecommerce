@@ -89,7 +89,7 @@ export interface Producto {
   updatedAt: string;
   publishedAt: string;
   imagenes: Imagen[];
-  categoria: Categoria;
+  categorias: Categoria[];
 }
 
 export interface ProductosResponse {

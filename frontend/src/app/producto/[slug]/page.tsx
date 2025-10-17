@@ -44,7 +44,6 @@ const ProductPage = () => {
         setProduct(data.data[0]);
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching product:', err);
         setError(true);
         setLoading(false);
       }
@@ -85,13 +84,13 @@ const ProductPage = () => {
 
   const handleAddToCart = () => {
     // TODO: Implement cart functionality
-    console.log(`Adding ${quantity} of ${product.titulo} to cart`);
   };
 
   // Check if product is inactive or out of stock
   const isInactive = product.activo !== true;
   const isOutOfStock = product.stock === 0;
   const showUnavailableMessage = isInactive || isOutOfStock;
+
 
   return (
     <div className=" bg-white px-4 py-28 md:py-30 md:px-8 lg:px-12">
@@ -109,11 +108,18 @@ const ProductPage = () => {
 
           {/* Product Details */}
           <div className="flex flex-col">
-            {/* Category Badge */}
-            {product.categoria && (
-              <span className="inline-block bg-black text-white text-base md:text-lg px-5 py-2 rounded-full w-fit mb-6">
-                {product.categoria.nombre}
-              </span>
+            {/* Category Badges */}
+            {product.categorias && product.categorias.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-6">
+                {product.categorias.map((categoria) => (
+                  <span
+                    key={categoria.id}
+                    className="inline-block bg-black text-white text-base md:text-lg px-5 py-2 rounded-full"
+                  >
+                    {categoria.nombre}
+                  </span>
+                ))}
+              </div>
             )}
 
             {/* Product Title */}
@@ -251,9 +257,9 @@ const ProductPage = () => {
         </div>
 
         {/* Related Products Carousel */}
-        {product.categoria && (
+        {product.categorias && product.categorias.length > 0 && (
           <RelatedProducts
-            categoria={product.categoria}
+            categorias={product.categorias}
             currentProductId={product.id}
           />
         )}

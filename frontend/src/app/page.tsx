@@ -1,6 +1,7 @@
 import HeroSection from "@/components/hero/HeroSection";
 import PlanHeroSection from "@/components/planHeroSection/PlanHeroSection";
 import PremiumProducts from "@/components/premiumProducts/PremiumProducts";
+import CategoryFilter from "@/components/category/CategoryFilter";
 import { getStrapiData } from "@/data/actions/strapi";
 import { ProductosResponse, CategoriasResponse } from "@/lib/interface";
 import Image from "next/image";
@@ -11,7 +12,7 @@ export default async function Home() {
     "/api/productos?populate=*"
   );
   const dataCategorias: CategoriasResponse = await getStrapiData(
-    "/api/categorias?populate=*"
+    "/api/categorias?populate=imagen"
   );
 
   return (
@@ -19,26 +20,12 @@ export default async function Home() {
       <HeroSection data={strapiData.data} />
       <PlanHeroSection />
       <PremiumProducts />
-      <div className="container mx-auto py-6">
-        <h2 className="text-3xl font-bold mb-6">Categorías</h2>
-        <div className="list-disc list-inside">
-          {dataCategorias.data.map((categoria) => (
-            <div key={categoria.id} className="mb-6">
-              <div>{categoria.nombre}</div>
-              {categoria.imagen && (
-                <div className="relative w-3xl h-32 mb-4">
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${categoria.imagen.url}`}
-                    alt={categoria.imagen.alternativeText || categoria.nombre}
-                    fill
-                    className="object-cover rounded-md"
-                  />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+
+      {/* Category Filter */}
+      <CategoryFilter
+        categorias={dataCategorias.data}
+        activeSlug="todos"
+      />
 
       <div className="container mx-auto py-6 mt-12">
         <h2 className="text-3xl font-bold mb-6">Productos</h2>

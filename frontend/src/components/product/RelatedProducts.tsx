@@ -8,12 +8,12 @@ import { ProductosResponse, Producto, Categoria } from '@/lib/interface';
 import ProductCard from './ProductCard';
 
 interface RelatedProductsProps {
-  categoria: Categoria;
+  categorias: Categoria[];
   currentProductId: number;
 }
 
 const RelatedProducts: React.FC<RelatedProductsProps> = ({
-  categoria,
+  categorias,
   currentProductId,
 }) => {
   const [relatedProducts, setRelatedProducts] = useState<Producto[]>([]);
@@ -30,48 +30,42 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
 
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 
-  // Fetch related products by category
+  // Fetch related products by categories
   useEffect(() => {
     async function fetchRelatedProducts() {
       try {
-        console.log('🔍 RelatedProducts - Categoria:', categoria);
-        console.log('🔍 RelatedProducts - Current Product ID:', currentProductId);
+        // Filter out "Todos" category
+        const validCategories = categorias.filter(
+          cat => cat.slug.toLowerCase() !== 'todos' && cat.nombre.toLowerCase() !== 'todos'
+        );
 
-        // Ignore "Todos" category - don't show related products
-        if (categoria.slug.toLowerCase() === 'todos' || categoria.nombre.toLowerCase() === 'todos') {
-          console.log('⚠️ RelatedProducts - Categoria "Todos" detectada, no se mostrarán productos');
+        if (validCategories.length === 0) {
           setRelatedProducts([]);
           setLoading(false);
           return;
         }
 
-        const query = `/api/productos?populate=*&filters[categoria][id][$eq]=${categoria.id}&filters[id][$ne]=${currentProductId}&filters[activo][$eq]=true`;
-        console.log('🔍 RelatedProducts - Query:', query);
+        // Build query for multiple categories using $in operator
+        const categoryIds = validCategories.map(cat => cat.id).join(',');
+        const query = `/api/productos?populate=*&filters[categorias][id][$in]=${categoryIds}&filters[id][$ne]=${currentProductId}&filters[activo][$eq]=true`;
 
         const data: ProductosResponse = await getStrapiData(query);
 
-        console.log('✅ RelatedProducts - Data received:', data);
-        console.log('✅ RelatedProducts - Products count:', data?.data?.length || 0);
-
         if (data?.data && data.data.length > 0) {
           setRelatedProducts(data.data);
-        } else {
-          console.log('⚠️ RelatedProducts - No products found');
         }
         setLoading(false);
       } catch (error) {
-        console.error('❌ Error fetching related products:', error);
         setLoading(false);
       }
     }
 
-    if (categoria && categoria.id) {
-      console.log('🚀 RelatedProducts - Starting fetch...');
+    if (categorias && categorias.length > 0) {
       fetchRelatedProducts();
     } else {
-      console.log('⚠️ RelatedProducts - No categoria or categoria.id');
+      setLoading(false);
     }
-  }, [categoria, currentProductId]);
+  }, [categorias, currentProductId]);
 
   // Navigation handlers
   const scrollPrev = useCallback(() => {
