@@ -42,7 +42,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
     : currentCategory?.nombre || 'Categoría';
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white py-28 md:py-30">
       {/* Category Filter */}
       <CategoryFilter
         categorias={categories}
