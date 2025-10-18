@@ -1,6 +1,7 @@
 import HeroSection from "@/components/hero/HeroSection";
 import PlanHeroSection from "@/components/planHeroSection/PlanHeroSection";
 import PremiumProducts from "@/components/premiumProducts/PremiumProducts";
+import CTASection from "@/components/ctaSection/CTASection";
 import CategoryFilter from "@/components/category/CategoryFilter";
 import { getStrapiData } from "@/data/actions/strapi";
 import { ProductosResponse, CategoriasResponse } from "@/lib/interface";
@@ -16,7 +17,7 @@ export default async function Home() {
   );
 
   return (
-    <main>
+    <div>
       <HeroSection data={strapiData.data} />
       <PlanHeroSection />
       {/* Category Filter */}
@@ -27,8 +28,9 @@ export default async function Home() {
       </div>
       <CategoryFilter categorias={dataCategorias.data} activeSlug="todos" />
       <PremiumProducts />
+      <CTASection />
 
-      <div className="container mx-auto py-6 mt-12">
+      {/* <div className="container mx-auto py-6 mt-12">
         <h2 className="text-3xl font-bold mb-6">Productos</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {dataProductos.data.map((producto) => (
@@ -84,7 +86,7 @@ export default async function Home() {
             </div>
           ))}
         </div>
-      </div>
-    </main>
+      </div> */}
+    </div>
   );
 }
