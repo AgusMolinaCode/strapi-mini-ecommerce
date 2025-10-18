@@ -98,46 +98,46 @@ const CTASection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-16 lg:gap-20"
+          className="flex flex-row items-center justify-center gap-6 sm:gap-8 md:gap-16 lg:gap-20"
         >
           {/* Stat 1 */}
-          <div className="text-center group">
-            <div className="mb-3 transform transition-transform group-hover:scale-110 duration-300">
-              <p className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white">
+          <div className="text-center group flex-1">
+            <div className="mb-1 md:mb-3 transform transition-transform group-hover:scale-110 duration-300">
+              <p className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold text-white">
                 500+
               </p>
             </div>
-            <p className="text-base md:text-lg lg:text-xl text-blue-200 font-medium">
+            <p className="text-xs sm:text-sm md:text-lg lg:text-xl text-blue-200 font-medium">
               Miembros Activos
             </p>
           </div>
 
           {/* Divider */}
-          <div className="hidden md:block w-px h-20 bg-gradient-to-b from-transparent via-blue-400 to-transparent"></div>
+          <div className="w-px h-12 sm:h-16 md:h-20 bg-gradient-to-b from-transparent via-blue-400 to-transparent"></div>
 
           {/* Stat 2 */}
-          <div className="text-center group">
-            <div className="mb-3 transform transition-transform group-hover:scale-110 duration-300">
-              <p className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white">
+          <div className="text-center group flex-1">
+            <div className="mb-1 md:mb-3 transform transition-transform group-hover:scale-110 duration-300">
+              <p className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold text-white">
                 15+
               </p>
             </div>
-            <p className="text-base md:text-lg lg:text-xl text-blue-200 font-medium">
+            <p className="text-xs sm:text-sm md:text-lg lg:text-xl text-blue-200 font-medium">
               Años de Experiencia
             </p>
           </div>
 
           {/* Divider */}
-          <div className="hidden md:block w-px h-20 bg-gradient-to-b from-transparent via-blue-400 to-transparent"></div>
+          <div className="w-px h-12 sm:h-16 md:h-20 bg-gradient-to-b from-transparent via-blue-400 to-transparent"></div>
 
           {/* Stat 3 */}
-          <div className="text-center group">
-            <div className="mb-3 transform transition-transform group-hover:scale-110 duration-300">
-              <p className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white">
+          <div className="text-center group flex-1">
+            <div className="mb-1 md:mb-3 transform transition-transform group-hover:scale-110 duration-300">
+              <p className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold text-white">
                 98%
               </p>
             </div>
-            <p className="text-base md:text-lg lg:text-xl text-blue-200 font-medium">
+            <p className="text-xs sm:text-sm md:text-lg lg:text-xl text-blue-200 font-medium">
               Satisfacción
             </p>
           </div>
