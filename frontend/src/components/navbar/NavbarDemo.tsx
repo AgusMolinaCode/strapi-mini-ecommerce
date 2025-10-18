@@ -25,7 +25,7 @@ export function NavbarDemo() {
     },
     {
       name: "Tienda",
-      link: "#tienda",
+      link: "/categorias/todos",
     },
   ];
 
