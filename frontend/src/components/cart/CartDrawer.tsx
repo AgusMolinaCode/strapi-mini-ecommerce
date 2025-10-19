@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { X, ShoppingBag } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 import CartItem from './CartItem';
 
 const CartDrawer: React.FC = () => {
+  const router = useRouter();
   const { items, isOpen, closeCart, getTotalItems, getTotalPrice } = useCartStore();
 
   const totalItems = getTotalItems();
@@ -108,8 +110,8 @@ const CartDrawer: React.FC = () => {
             <button
               className="w-full bg-red-500 hover:bg-red-600 text-white text-xl font-medium py-4 px-6 rounded-lg transition-colors shadow-lg hover:shadow-xl"
               onClick={() => {
-                // TODO: Implement checkout functionality
-                alert('Funcionalidad de checkout próximamente');
+                closeCart();
+                router.push('/checkout');
               }}
             >
               Proceder al Pago
