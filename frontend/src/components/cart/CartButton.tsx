@@ -22,12 +22,12 @@ const CartButton: React.FC<CartButtonProps> = ({ variant = 'desktop' }) => {
     return (
       <button
         onClick={openCart}
-        className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
+        className="relative p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
         aria-label={`Carrito de compras (${totalItems} items)`}
       >
         <IconShoppingCart className="h-6 w-6 text-black" />
         {totalItems > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-sm font-semibold rounded-full min-h-6 min-w-6 px-1.5 flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-md font-semibold rounded-full min-h-6 min-w-6 px-1.5 flex items-center justify-center">
             {totalItems}
           </span>
         )}
@@ -38,12 +38,12 @@ const CartButton: React.FC<CartButtonProps> = ({ variant = 'desktop' }) => {
   return (
     <button
       onClick={openCart}
-      className="relative flex items-center justify-center bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors shadow-md hover:shadow-lg"
+      className="relative flex items-center justify-center px-4 py-2 rounded-lg transition-colors cursor-pointer"
       aria-label={`Carrito de compras (${totalItems} items)`}
     >
-      <IconShoppingCart className="h-5 w-5" />
+      <IconShoppingCart className="h-8 w-8" />
       {totalItems > 0 && (
-        <span className="absolute -top-2 -right-2 bg-white text-red-500 text-lg rounded-full min-h-6 min-w-6 px-1.5 flex items-center justify-center border-2 border-red-500">
+        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-lg rounded-full min-h-6 min-w-6 px-1.5 flex items-center justify-center">
           {totalItems}
         </span>
       )}
