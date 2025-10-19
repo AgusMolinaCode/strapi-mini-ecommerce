@@ -7,6 +7,7 @@ import { Producto, ProductosResponse } from '@/lib/interface';
 import ProductImageGallery from '@/components/product/ProductImageGallery';
 import RelatedProducts from '@/components/product/RelatedProducts';
 import { Mail, Phone, MessageCircle } from 'lucide-react';
+import { useCartStore } from '@/store/cartStore';
 
 const ProductPage = () => {
   const params = useParams();
@@ -19,6 +20,7 @@ const ProductPage = () => {
   const [error, setError] = useState(false);
 
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+  const { addItem } = useCartStore();
 
   useEffect(() => {
     async function fetchProduct() {
@@ -83,7 +85,17 @@ const ProductPage = () => {
   }
 
   const handleAddToCart = () => {
-    // TODO: Implement cart functionality
+    if (product && product.stock > 0) {
+      addItem({
+        id: product.id,
+        documentId: product.documentId,
+        titulo: product.titulo,
+        precio: product.precio,
+        stock: product.stock,
+        imagen: product.imagenes?.[0]?.url ? `${baseUrl}${product.imagenes[0].url}` : '',
+        slug: product.slug,
+      }, quantity);
+    }
   };
 
   // Check if product is inactive or out of stock

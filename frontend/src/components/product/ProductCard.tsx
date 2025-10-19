@@ -1,8 +1,11 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ShoppingBag } from 'lucide-react';
 import { Producto } from '@/lib/interface';
+import { useCartStore } from '@/store/cartStore';
 
 interface ProductCardProps {
   producto: Producto;
@@ -10,6 +13,25 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ producto, baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337' }) => {
+  const { addItem } = useCartStore();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (producto.stock > 0) {
+      addItem({
+        id: producto.id,
+        documentId: producto.documentId,
+        titulo: producto.titulo,
+        precio: producto.precio,
+        stock: producto.stock,
+        imagen: producto.imagenes?.[0]?.url ? `${baseUrl}${producto.imagenes[0].url}` : '',
+        slug: producto.slug,
+      }, 1);
+    }
+  };
+
   return (
     <Link
       href={`/producto/${producto.slug}`}
@@ -59,7 +81,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ producto, baseUrl = process.e
               ${producto.precio.toLocaleString()}
             </span>
           </div>
-          <button className="bg-red-500 text-white p-2.5 md:p-3 lg:p-4 rounded-full hover:bg-red-600 transition-colors duration-200">
+          <button
+            onClick={handleAddToCart}
+            disabled={producto.stock === 0}
+            className="bg-red-500 text-white p-2.5 md:p-3 lg:p-4 rounded-full hover:bg-red-600 transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            aria-label="Agregar al carrito"
+          >
             <ShoppingBag className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
           </button>
         </div>

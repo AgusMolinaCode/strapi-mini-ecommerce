@@ -49,8 +49,8 @@ const PremiumProducts = async () => {
 
         {/* Ver Toda La Tienda Button */}
         <div className="text-center">
-          <Link href="/categorias/todos" className="cursor-pointer">
-            <button className="px-8 py-4 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all duration-200 text-xl md:text-2xl inline-flex items-center gap-2 group">
+          <Link href="/categorias/todos">
+            <button className="px-8 py-4 cursor-pointer bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all duration-200 text-xl md:text-2xl inline-flex items-center gap-2 group">
               Ver Toda La Tienda
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>

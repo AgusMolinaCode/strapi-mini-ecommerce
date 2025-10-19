@@ -5,13 +5,13 @@ import {
   NavItems,
   MobileNav,
   NavbarLogo,
-  NavbarButton,
   MobileNavHeader,
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
 import { useState } from "react";
-import { IconShoppingCart } from "@tabler/icons-react";
+import CartButton from "@/components/cart/CartButton";
+import CartDrawer from "@/components/cart/CartDrawer";
 
 export function NavbarDemo() {
   const navItems = [
@@ -39,9 +39,7 @@ export function NavbarDemo() {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <NavbarButton variant="primary" className="flex items-center justify-center">
-              <IconShoppingCart className="h-5 w-5" />
-            </NavbarButton>
+            <CartButton variant="desktop" />
           </div>
         </NavBody>
 
@@ -50,9 +48,7 @@ export function NavbarDemo() {
           <MobileNavHeader>
             <NavbarLogo />
             <div className="flex items-center gap-3 pr-2">
-              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                <IconShoppingCart className="h-6 w-6 text-black" />
-              </button>
+              <CartButton variant="mobile" />
               <MobileNavToggle
                 isOpen={isMobileMenuOpen}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -78,7 +74,8 @@ export function NavbarDemo() {
         </MobileNav>
       </Navbar>
 
-      {/* Navbar */}
+      {/* Cart Drawer */}
+      <CartDrawer />
     </div>
   );
 }

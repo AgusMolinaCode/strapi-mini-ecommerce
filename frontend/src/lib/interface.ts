@@ -155,3 +155,15 @@ export interface PlansResponse {
     };
   };
 }
+
+// Cart interfaces
+export interface CartItem {
+  id: number;
+  documentId: string;
+  titulo: string;
+  precio: number;
+  quantity: number;
+  stock: number;
+  imagen: string;
+  slug: string;
+}
