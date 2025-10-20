@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Bebas_Neue } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import { NavbarDemo } from "@/components/navbar/NavbarDemo";
 import Footer from "@/components/footer/footer";
 
-const bebasNeue = Bebas_Neue({
+const outfit = Outfit({
   weight: "400",
   subsets: ["latin"],
 });
@@ -20,7 +20,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${bebasNeue.className} scroll-smooth`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${outfit.className} scroll-smooth`}
+      suppressHydrationWarning
+    >
       <body className="antialiased">
         <NavbarDemo />
         {children}
