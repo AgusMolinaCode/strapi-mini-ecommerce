@@ -59,11 +59,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ producto, baseUrl = process.e
       <div className="p-4 md:p-6 lg:p-8 flex flex-col flex-grow">
         {/* Category */}
         <span className="text-xs md:text-sm uppercase tracking-wide text-gray-500 mb-2 md:mb-3">
-          {producto.categoria?.nombre || 'Sin categoría'}
+          {producto.categorias?.[0]?.nombre || 'Sin categoría'}
         </span>
 
         {/* Product Name */}
-        <h3 className="text-base md:text-xl lg:text-2xl text-gray-900 mb-4 md:mb-6 flex-grow">
+        <h3 className="text-base md:text-lg lg:text-xl text-gray-900 mb-4 md:mb-6 flex-grow">
           {producto.titulo.length > 40
             ? `${producto.titulo.substring(0, 40)}...`
             : producto.titulo}

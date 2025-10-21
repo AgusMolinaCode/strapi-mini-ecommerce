@@ -24,14 +24,14 @@ const PremiumProducts = async () => {
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
           <div className="inline-block mb-6">
-            <span className="px-4 py-2 bg-gray-900 text-white rounded-full text-md font-medium uppercase tracking-wide">
+            <span className="px-4 py-2 bg-gray-900 text-white rounded-full text-sm font-medium uppercase tracking-wide">
               TIENDA FITPRO
             </span>
           </div>
-          <h2 className="text-5xl sm:text-6xl md:text-7xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-4">
             Productos Premium
           </h2>
-          <p className="text-xl md:text-2xl text-gray-600">
+          <p className="text-lg md:text-xl text-gray-600">
             Equipamiento y suplementos de la más alta calidad
           </p>
         </div>
@@ -50,7 +50,7 @@ const PremiumProducts = async () => {
         {/* Ver Toda La Tienda Button */}
         <div className="text-center">
           <Link href="/categorias/todos">
-            <button className="px-8 py-4 cursor-pointer bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all duration-200 text-xl md:text-2xl inline-flex items-center gap-2 group">
+            <button className="px-8 py-4 cursor-pointer bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all duration-200 text-lg md:text-xl inline-flex items-center gap-2 group">
               Ver Toda La Tienda
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>

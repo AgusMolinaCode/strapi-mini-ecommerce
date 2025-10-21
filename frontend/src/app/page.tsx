@@ -22,7 +22,7 @@ export default async function Home() {
       <PlanHeroSection />
       {/* Category Filter */}
       <div className="max-w-7xl mx-auto px-4 pt-12">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
           Categorias
         </h2>
       </div>
