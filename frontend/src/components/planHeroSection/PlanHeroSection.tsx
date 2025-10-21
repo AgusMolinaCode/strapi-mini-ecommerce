@@ -52,14 +52,14 @@ const PlanHeroSection = async () => {
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-block mb-8">
-            <span className="px-4 py-2 bg-red-100 text-red-500 rounded-full text-md font-medium uppercase tracking-wide">
+            <span className="px-4 py-2 bg-red-100 text-red-500 rounded-full text-sm font-medium uppercase tracking-wide">
               PLANES DE ENTRENAMIENTO
             </span>
           </div>
-          <h1 className=" text-5xl sm:text-6xl md:text-7xl font-bold text-gray-900 mb-4">
+          <h1 className=" text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-4">
             Elegí Tu Plan
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600">
+          <p className="text-lg md:text-xl text-gray-600">
             Opciones flexibles para cada objetivo y estilo de vida
           </p>
         </div>
@@ -99,7 +99,7 @@ const PlanHeroSection = async () => {
                 {/* Plan Name */}
                 <h3
                   className={`font-bold text-gray-900 mb-4 ${
-                    plan.popular ? "text-3xl" : "text-2xl"
+                    plan.popular ? "text-2xl" : "text-xl"
                   }`}
                 >
                   {plan.nombre}
@@ -109,14 +109,14 @@ const PlanHeroSection = async () => {
                 <div className="mb-6">
                   <span
                     className={`font-bold text-gray-900 ${
-                      plan.popular ? "text-6xl" : "text-5xl"
+                      plan.popular ? "text-5xl" : "text-4xl"
                     }`}
                   >
                     ${plan.precio}
                   </span>
                   <span
                     className={`text-gray-600 ml-1 ${
-                      plan.popular ? "text-xl" : "text-lg"
+                      plan.popular ? "text-lg" : "text-md"
                     }`}
                   >
                     {periodoTexto}
@@ -136,7 +136,7 @@ const PlanHeroSection = async () => {
                       ></span>
                       <span
                         className={`text-gray-700 ${
-                          plan.popular ? "text-xl" : "text-lg"
+                          plan.popular ? "text-lg" : "text-md"
                         }`}
                       >
                         {feature.text}
