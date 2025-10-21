@@ -137,7 +137,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
               className="absolute inset-0 h-full w-full rounded-3xl bg-gray-200 "
             />
           )}
-          <span className="relative z-20 text-xl ">{item.name}</span>
+          <span className="relative z-20 text-lg ">{item.name}</span>
         </Link>
       ))}
     </motion.div>
@@ -250,7 +250,7 @@ export const NavbarLogo = () => {
           fill="currentColor"
         />
       </svg>
-      <span className="font-semibold text-2xl md:text-3xl text-black dark:text-white">
+      <span className="font-semibold text-xl md:text-2xl text-black dark:text-white">
         Sara-Gym
       </span>
     </a>
