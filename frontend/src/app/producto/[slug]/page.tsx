@@ -6,7 +6,7 @@ import { getStrapiData } from '@/data/actions/strapi';
 import { Producto, ProductosResponse } from '@/lib/interface';
 import ProductImageGallery from '@/components/product/ProductImageGallery';
 import RelatedProducts from '@/components/product/RelatedProducts';
-import { Mail, Phone, MessageCircle } from 'lucide-react';
+import { Mail, Phone, MessageCircle, ChevronDown } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 
 const ProductPage = () => {
@@ -18,6 +18,7 @@ const ProductPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
   const { addItem } = useCartStore();
@@ -71,7 +72,7 @@ const ProductPage = () => {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Producto no encontrado</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Producto no encontrado</h1>
           <p className="text-gray-600 mb-6">El producto que buscas no existe o ha sido eliminado.</p>
           <button
             onClick={() => router.push('/')}
@@ -126,7 +127,7 @@ const ProductPage = () => {
                 {product.categorias.map((categoria) => (
                   <span
                     key={categoria.id}
-                    className="inline-block bg-black text-white text-base md:text-lg px-5 py-2 rounded-full"
+                    className="inline-block bg-gray-800/20 text-gray-700 text-base md:text-md p-2 rounded-full"
                   >
                     {categoria.nombre}
                   </span>
@@ -135,26 +136,41 @@ const ProductPage = () => {
             )}
 
             {/* Product Title */}
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 leading-tight">
               {product.titulo}
             </h1>
 
             {/* Price */}
             <div className="mb-8">
               {product.en_oferta === true && product.precio_anterior && product.precio_anterior > product.precio && (
-                <p className="text-2xl md:text-3xl text-gray-400 line-through mb-2">
+                <p className="text-xl md:text-2xl text-gray-400 line-through mb-2">
                   ${product.precio_anterior.toLocaleString()}
                 </p>
               )}
-              <p className="text-5xl md:text-6xl lg:text-7xl font-bold text-red-500">
+              <p className="text-4xl md:text-5xl lg:text-6xl font-bold text-red-500">
                 ${product.precio.toLocaleString()}
               </p>
             </div>
 
             {/* Description */}
-            <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
-              {product.descripcion}
-            </p>
+            <div className="mb-8">
+              <p className={`text-md md:text-lg text-gray-600 leading-relaxed transition-all duration-300 ${
+                isDescriptionExpanded ? '' : 'line-clamp-3'
+              }`}>
+                {product.descripcion}
+              </p>
+              <button
+                onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                className="mt-3 flex items-center gap-2 text-red-500 hover:text-red-600 font-medium transition-colors group"
+              >
+                <span>{isDescriptionExpanded ? 'Ver menos' : 'Ver más'}</span>
+                <ChevronDown
+                  className={`w-5 h-5 transition-transform duration-300 ${
+                    isDescriptionExpanded ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+            </div>
 
             {/* Unavailable Message (Inactive or Out of Stock) */}
             {showUnavailableMessage ? (

@@ -1,18 +1,21 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { ShoppingBag } from 'lucide-react';
-import { Producto } from '@/lib/interface';
-import { useCartStore } from '@/store/cartStore';
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ShoppingBag } from "lucide-react";
+import { Producto } from "@/lib/interface";
+import { useCartStore } from "@/store/cartStore";
 
 interface ProductCardProps {
   producto: Producto;
   baseUrl?: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ producto, baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337' }) => {
+const ProductCard: React.FC<ProductCardProps> = ({
+  producto,
+  baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337",
+}) => {
   const { addItem } = useCartStore();
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -20,15 +23,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ producto, baseUrl = process.e
     e.stopPropagation();
 
     if (producto.stock > 0) {
-      addItem({
-        id: producto.id,
-        documentId: producto.documentId,
-        titulo: producto.titulo,
-        precio: producto.precio,
-        stock: producto.stock,
-        imagen: producto.imagenes?.[0]?.url ? `${baseUrl}${producto.imagenes[0].url}` : '',
-        slug: producto.slug,
-      }, 1);
+      addItem(
+        {
+          id: producto.id,
+          documentId: producto.documentId,
+          titulo: producto.titulo,
+          precio: producto.precio,
+          stock: producto.stock,
+          imagen: producto.imagenes?.[0]?.url
+            ? `${baseUrl}${producto.imagenes[0].url}`
+            : "",
+          slug: producto.slug,
+        },
+        1
+      );
     }
   };
 
@@ -59,7 +67,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ producto, baseUrl = process.e
       <div className="p-4 md:p-6 lg:p-8 flex flex-col flex-grow">
         {/* Category */}
         <span className="text-xs md:text-sm uppercase tracking-wide text-gray-500 mb-2 md:mb-3">
-          {producto.categorias?.[0]?.nombre || 'Sin categoría'}
+          {producto.categorias?.[0]?.nombre.substring(0, 20) || "Sin categoría"}
         </span>
 
         {/* Product Name */}
@@ -72,11 +80,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ producto, baseUrl = process.e
         {/* Price and Button */}
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
-            {producto.en_oferta === true && producto.precio_anterior && producto.precio_anterior > producto.precio && (
-              <span className="text-xl md:text-2xl text-gray-400 line-through">
-                ${producto.precio_anterior.toLocaleString()}
-              </span>
-            )}
+            {producto.en_oferta === true &&
+              producto.precio_anterior &&
+              producto.precio_anterior > producto.precio && (
+                <span className="text-xl md:text-2xl text-gray-400 line-through">
+                  ${producto.precio_anterior.toLocaleString()}
+                </span>
+              )}
             <span className="text-3xl lg:text-4xl text-red-500 font-bold">
               ${producto.precio.toLocaleString()}
             </span>
