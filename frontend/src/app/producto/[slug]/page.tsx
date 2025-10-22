@@ -250,17 +250,17 @@ const ProductPage = () => {
                   <div className="flex items-center border-2 border-gray-300 rounded-xl overflow-hidden">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="px-5 py-3 md:px-6 md:py-4 text-xl md:text-2xl hover:bg-gray-100 transition-colors"
+                      className="px-5 py-3 md:px-4 md:py-4 text-lg md:text-xl hover:bg-gray-100 transition-colors"
                       disabled={quantity <= 1}
                     >
                       −
                     </button>
-                    <span className="px-8 py-3 md:px-10 md:py-4 text-xl md:text-2xl font-semibold border-x-2 border-gray-300">
+                    <span className="px-6 py-3 md:px-8 md:py-4 text-lg md:text-xl font-semibold border-x-2 border-gray-300">
                       {quantity}
                     </span>
                     <button
                       onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                      className="px-5 py-3 md:px-6 md:py-4 text-xl md:text-2xl hover:bg-gray-100 transition-colors"
+                      className="px-5 py-3 md:px-4 md:py-4 text-lg md:text-xl hover:bg-gray-100 transition-colors"
                       disabled={quantity >= product.stock}
                     >
                       +
@@ -271,7 +271,7 @@ const ProductPage = () => {
                 {/* Add to Cart Button */}
                 <button
                   onClick={handleAddToCart}
-                  className="w-full bg-red-500 hover:bg-red-600 text-white text-xl md:text-2xl lg:text-3xl py-2 md:py-3 px-8 rounded-xl flex items-center justify-center gap-4 mb-10 transition-colors shadow-lg hover:shadow-xl cursor-pointer"
+                  className="w-full bg-red-500 hover:bg-red-600 text-white text-lg md:text-xl lg:text-2xl py-2 md:py-3 px-8 rounded-xl flex items-center justify-center gap-4 mb-10 transition-colors shadow-lg hover:shadow-xl cursor-pointer"
                 >
                   <span>
                     Agregar al Carrito - ${(product.precio * quantity).toLocaleString()}
