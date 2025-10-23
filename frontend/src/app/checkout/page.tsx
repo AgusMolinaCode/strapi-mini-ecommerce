@@ -14,13 +14,19 @@ const CheckoutPage = () => {
   const { items, getTotalItems } = useCartStore();
   const { setBuyerData, setPaymentStatus } = useCheckoutStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Prevent hydration mismatch by only rendering after client mount
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Redirect if cart is empty
   useEffect(() => {
-    if (getTotalItems() === 0) {
+    if (isMounted && getTotalItems() === 0) {
       router.push('/');
     }
-  }, [getTotalItems, router]);
+  }, [isMounted, getTotalItems, router]);
 
   const handleFormSubmit = async (data: CheckoutProductFormData) => {
     setIsSubmitting(true);
@@ -53,8 +59,21 @@ const CheckoutPage = () => {
     }
   };
 
+  // Show loading state during SSR/hydration to prevent mismatch
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-28 md:py-32 px-4 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Cargando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // After hydration, redirect if cart is empty
   if (getTotalItems() === 0) {
-    return null; // Will redirect
+    return null; // Will redirect via useEffect
   }
 
   return (
