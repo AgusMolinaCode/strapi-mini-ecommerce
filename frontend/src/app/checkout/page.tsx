@@ -34,27 +34,73 @@ const CheckoutPage = () => {
     setBuyerData(data);
 
     try {
-      // TODO: Integrar con MercadoPago
-      // 1. Enviar datos al backend para crear preferencia de pago
-      // 2. Recibir preferenceId de MercadoPago
-      // 3. Redirigir a MercadoPago checkout
+      const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 
-      console.log('Datos del comprador:', data);
-      console.log('Items del carrito:', items);
+      // Calcular totales
+      const subtotal = items.reduce((total, item) => total + item.precio * item.quantity, 0);
+      const shippingCost = 0; // Puedes calcular esto según la ubicación
+      const total = subtotal + shippingCost;
 
-      // Simulación temporal
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Preparar items para la API
+      const formattedItems = items.map(item => ({
+        productId: item.id,
+        title: item.titulo,
+        quantity: item.quantity,
+        unitPrice: item.precio,
+        subtotal: item.precio * item.quantity,
+        image: item.imagen,
+      }));
 
-      alert('Funcionalidad de pago próximamente. Datos guardados correctamente.');
+      // Crear orden en Strapi y obtener preferenceId de MercadoPago
+      const response = await fetch(`${STRAPI_URL}/api/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: {
+            buyerData: {
+              nombre: data.nombre,
+              email: data.email,
+              telefono: data.telefono,
+            },
+            items: formattedItems,
+            subtotal,
+            shippingCost,
+            total,
+            shippingAddress: {
+              direccion: data.direccion,
+              numero: data.numero,
+              piso: data.piso || '',
+              ciudad: data.ciudad,
+              provincia: data.provincia,
+              codigoPostal: data.codigoPostal,
+              notas: data.notas || '',
+            },
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al crear la orden');
+      }
+
+      const result = await response.json();
+
+      // Guardar orden ID en el store
       setPaymentStatus('success');
 
-      // TODO: Descomentar cuando MercadoPago esté integrado
-      // router.push('/checkout/success');
+      // Redirigir a MercadoPago
+      if (result.initPoint) {
+        window.location.href = result.initPoint;
+      } else {
+        throw new Error('No se recibió el link de pago');
+      }
+
     } catch (error) {
       console.error('Error al procesar el pago:', error);
       setPaymentStatus('error');
       alert('Error al procesar el pago. Por favor intenta nuevamente.');
-    } finally {
       setIsSubmitting(false);
     }
   };

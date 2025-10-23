@@ -28,27 +28,51 @@ const CheckoutPlanPage = () => {
     setBuyerData(data);
 
     try {
-      // TODO: Integrar con MercadoPago para suscripciones
-      // 1. Enviar datos al backend para crear suscripción
-      // 2. Recibir preapproval_id de MercadoPago
-      // 3. Redirigir a MercadoPago checkout
+      const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 
-      console.log('Datos del suscriptor:', data);
-      console.log('Plan seleccionado:', selectedPlan);
+      if (!selectedPlan) {
+        throw new Error('No hay plan seleccionado');
+      }
 
-      // Simulación temporal
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Crear suscripción en Strapi y obtener preapprovalId de MercadoPago
+      const response = await fetch(`${STRAPI_URL}/api/subscriptions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: {
+            subscriberData: {
+              nombre: data.nombre,
+              email: data.email,
+              telefono: data.telefono,
+            },
+            planId: selectedPlan.id,
+            frequency: 'monthly', // o extraerlo del plan
+          },
+        }),
+      });
 
-      alert('Funcionalidad de suscripción próximamente. Datos guardados correctamente.');
+      if (!response.ok) {
+        throw new Error('Error al crear la suscripción');
+      }
+
+      const result = await response.json();
+
+      // Guardar subscription ID en el store
       setPaymentStatus('success');
 
-      // TODO: Descomentar cuando MercadoPago esté integrado
-      // router.push('/checkout/success');
+      // Redirigir a MercadoPago
+      if (result.initPoint) {
+        window.location.href = result.initPoint;
+      } else {
+        throw new Error('No se recibió el link de pago');
+      }
+
     } catch (error) {
       console.error('Error al procesar la suscripción:', error);
       setPaymentStatus('error');
       alert('Error al procesar la suscripción. Por favor intenta nuevamente.');
-    } finally {
       setIsSubmitting(false);
     }
   };

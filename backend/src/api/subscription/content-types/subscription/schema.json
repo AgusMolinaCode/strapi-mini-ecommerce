@@ -1,0 +1,74 @@
+{
+  "kind": "collectionType",
+  "collectionName": "subscriptions",
+  "info": {
+    "singularName": "subscription",
+    "pluralName": "subscriptions",
+    "displayName": "Subscription",
+    "description": "Recurring subscriptions for plans"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "pending_payment",
+        "active",
+        "paused",
+        "cancelled"
+      ],
+      "default": "pending_payment",
+      "required": true
+    },
+    "preapprovalId": {
+      "type": "string"
+    },
+    "externalReference": {
+      "type": "string",
+      "unique": true
+    },
+    "plan": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::plan.plan"
+    },
+    "subscriberName": {
+      "type": "string",
+      "required": true
+    },
+    "subscriberEmail": {
+      "type": "email",
+      "required": true
+    },
+    "subscriberPhone": {
+      "type": "string",
+      "required": true
+    },
+    "frequency": {
+      "type": "string",
+      "required": true
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "startDate": {
+      "type": "date"
+    },
+    "nextBillingDate": {
+      "type": "date"
+    },
+    "endDate": {
+      "type": "date"
+    },
+    "activatedAt": {
+      "type": "datetime"
+    },
+    "cancelledAt": {
+      "type": "datetime"
+    }
+  }
+}

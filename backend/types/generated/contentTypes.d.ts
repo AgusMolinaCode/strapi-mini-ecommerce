@@ -495,6 +495,62 @@ export interface ApiHomePageHomePage extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
+  collectionName: 'orders';
+  info: {
+    description: 'Orders for physical products with shipping';
+    displayName: 'Order';
+    pluralName: 'orders';
+    singularName: 'order';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    buyerEmail: Schema.Attribute.Email & Schema.Attribute.Required;
+    buyerName: Schema.Attribute.String & Schema.Attribute.Required;
+    buyerPhone: Schema.Attribute.String & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    deliveredAt: Schema.Attribute.DateTime;
+    externalReference: Schema.Attribute.String & Schema.Attribute.Unique;
+    items: Schema.Attribute.JSON & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'> &
+      Schema.Attribute.Private;
+    notes: Schema.Attribute.Text;
+    orderNumber: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    paidAt: Schema.Attribute.DateTime;
+    paymentId: Schema.Attribute.String;
+    preferenceId: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    shippedAt: Schema.Attribute.DateTime;
+    shippingAddress: Schema.Attribute.JSON & Schema.Attribute.Required;
+    shippingCost: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<0>;
+    status: Schema.Attribute.Enumeration<
+      [
+        'pending',
+        'approved',
+        'rejected',
+        'failed',
+        'shipped',
+        'delivered',
+        'cancelled',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'pending'>;
+    subtotal: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    total: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
   collectionName: 'plans';
   info: {
@@ -566,6 +622,53 @@ export interface ApiProductoProducto extends Struct.CollectionTypeSchema {
     slug: Schema.Attribute.UID<'titulo'>;
     stock: Schema.Attribute.Integer;
     titulo: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiSubscriptionSubscription
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'subscriptions';
+  info: {
+    description: 'Recurring subscriptions for plans';
+    displayName: 'Subscription';
+    pluralName: 'subscriptions';
+    singularName: 'subscription';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    activatedAt: Schema.Attribute.DateTime;
+    amount: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    cancelledAt: Schema.Attribute.DateTime;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    endDate: Schema.Attribute.Date;
+    externalReference: Schema.Attribute.String & Schema.Attribute.Unique;
+    frequency: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::subscription.subscription'
+    > &
+      Schema.Attribute.Private;
+    nextBillingDate: Schema.Attribute.Date;
+    plan: Schema.Attribute.Relation<'manyToOne', 'api::plan.plan'>;
+    preapprovalId: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    startDate: Schema.Attribute.Date;
+    status: Schema.Attribute.Enumeration<
+      ['pending_payment', 'active', 'paused', 'cancelled']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'pending_payment'>;
+    subscriberEmail: Schema.Attribute.Email & Schema.Attribute.Required;
+    subscriberName: Schema.Attribute.String & Schema.Attribute.Required;
+    subscriberPhone: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1084,8 +1187,10 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::categoria.categoria': ApiCategoriaCategoria;
       'api::home-page.home-page': ApiHomePageHomePage;
+      'api::order.order': ApiOrderOrder;
       'api::plan.plan': ApiPlanPlan;
       'api::producto.producto': ApiProductoProducto;
+      'api::subscription.subscription': ApiSubscriptionSubscription;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
