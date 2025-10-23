@@ -8,6 +8,8 @@ import CheckoutFormProduct from '@/components/checkout/CheckoutFormProduct';
 import OrderSummary from '@/components/checkout/OrderSummary';
 import { ArrowLeft } from 'lucide-react';
 import type { CheckoutProductFormData } from '@/lib/validations/checkout';
+import type { CreateOrderData } from '@/lib/interface';
+import { createOrder } from '@/data/actions/strapi';
 
 const CheckoutPage = () => {
   const router = useRouter();
@@ -34,58 +36,42 @@ const CheckoutPage = () => {
     setBuyerData(data);
 
     try {
-      const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
-
       // Calcular totales
       const subtotal = items.reduce((total, item) => total + item.precio * item.quantity, 0);
       const shippingCost = 0; // Puedes calcular esto según la ubicación
       const total = subtotal + shippingCost;
 
-      // Preparar items para la API
-      const formattedItems = items.map(item => ({
-        productId: item.id,
-        title: item.titulo,
-        quantity: item.quantity,
-        unitPrice: item.precio,
-        subtotal: item.precio * item.quantity,
-        image: item.imagen,
-      }));
-
-      // Crear orden en Strapi y obtener preferenceId de MercadoPago
-      const response = await fetch(`${STRAPI_URL}/api/orders`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      // Preparar datos para la API usando el tipo correcto
+      const orderData: CreateOrderData = {
+        buyerData: {
+          nombre: data.nombre,
+          email: data.email,
+          telefono: data.telefono,
         },
-        body: JSON.stringify({
-          data: {
-            buyerData: {
-              nombre: data.nombre,
-              email: data.email,
-              telefono: data.telefono,
-            },
-            items: formattedItems,
-            subtotal,
-            shippingCost,
-            total,
-            shippingAddress: {
-              direccion: data.direccion,
-              numero: data.numero,
-              piso: data.piso || '',
-              ciudad: data.ciudad,
-              provincia: data.provincia,
-              codigoPostal: data.codigoPostal,
-              notas: data.notas || '',
-            },
-          },
-        }),
-      });
+        items: items.map(item => ({
+          productId: item.id,
+          title: item.titulo,
+          quantity: item.quantity,
+          unitPrice: item.precio,
+          subtotal: item.precio * item.quantity,
+          image: item.imagen,
+        })),
+        subtotal,
+        shippingCost,
+        total,
+        shippingAddress: {
+          direccion: data.direccion,
+          numero: data.numero,
+          piso: data.piso || '',
+          ciudad: data.ciudad,
+          provincia: data.provincia,
+          codigoPostal: data.codigoPostal,
+          notas: data.notas || '',
+        },
+      };
 
-      if (!response.ok) {
-        throw new Error('Error al crear la orden');
-      }
-
-      const result = await response.json();
+      // Crear orden usando la función de strapi.ts
+      const result = await createOrder(orderData);
 
       // Guardar orden ID en el store
       setPaymentStatus('success');
@@ -100,7 +86,13 @@ const CheckoutPage = () => {
     } catch (error) {
       console.error('Error al procesar el pago:', error);
       setPaymentStatus('error');
-      alert('Error al procesar el pago. Por favor intenta nuevamente.');
+
+      // Mostrar mensaje de error más específico
+      const errorMessage = error instanceof Error
+        ? error.message
+        : 'Error al procesar el pago. Por favor intenta nuevamente.';
+
+      alert(errorMessage);
       setIsSubmitting(false);
     }
   };

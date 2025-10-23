@@ -167,3 +167,127 @@ export interface CartItem {
   imagen: string;
   slug: string;
 }
+
+// ============================================
+// ORDERS - Productos físicos
+// ============================================
+
+export interface OrderItem {
+  productId: number;
+  title: string;
+  quantity: number;
+  unitPrice: number;
+  subtotal: number;
+  image?: string;
+}
+
+export interface BuyerData {
+  nombre: string;
+  email: string;
+  telefono: string;
+}
+
+export interface ShippingAddress {
+  direccion: string;
+  numero: string;
+  piso?: string;
+  ciudad: string;
+  provincia: string;
+  codigoPostal: string;
+  notas?: string;
+}
+
+export interface CreateOrderData {
+  buyerData: BuyerData;
+  items: OrderItem[];
+  subtotal: number;
+  shippingCost: number;
+  total: number;
+  shippingAddress: ShippingAddress;
+}
+
+export interface OrderInfo {
+  id: number;
+  orderNumber: string;
+  status: string;
+}
+
+export interface CreateOrderResponse {
+  order: OrderInfo;
+  preferenceId: string;
+  initPoint: string;
+}
+
+export interface Order {
+  id: number;
+  orderNumber: string;
+  status: 'pending' | 'approved' | 'rejected' | 'failed' | 'shipped' | 'delivered' | 'cancelled';
+  preferenceId?: string;
+  paymentId?: string;
+  externalReference: string;
+  buyerName: string;
+  buyerEmail: string;
+  buyerPhone: string;
+  shippingAddress: ShippingAddress;
+  items: OrderItem[];
+  subtotal: number;
+  shippingCost: number;
+  total: number;
+  paidAt?: string;
+  shippedAt?: string;
+  deliveredAt?: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GetOrderResponse {
+  data: Order;
+}
+
+// ============================================
+// SUBSCRIPTIONS - Planes recurrentes
+// ============================================
+
+export interface SubscriberData {
+  nombre: string;
+  email: string;
+  telefono: string;
+}
+
+export interface CreateSubscriptionData {
+  subscriberData: SubscriberData;
+  planId: number;
+  frequency: 'monthly' | 'yearly';
+}
+
+export interface SubscriptionInfo {
+  id: number;
+  status: string;
+}
+
+export interface CreateSubscriptionResponse {
+  subscription: SubscriptionInfo;
+  preapprovalId: string;
+  initPoint: string;
+}
+
+export interface Subscription {
+  id: number;
+  status: 'pending_payment' | 'active' | 'paused' | 'cancelled';
+  preapprovalId?: string;
+  externalReference: string;
+  plan: Plan;
+  subscriberName: string;
+  subscriberEmail: string;
+  subscriberPhone: string;
+  frequency: string;
+  amount: number;
+  startDate?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GetSubscriptionResponse {
+  data: Subscription;
+}

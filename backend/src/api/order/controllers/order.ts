@@ -1,14 +1,12 @@
-'use strict';
-
-const { MercadoPagoConfig, Preference } = require('mercadopago');
-
 /**
  * order controller
  */
 
-const { createCoreController } = require('@strapi/strapi').factories;
+import { factories } from '@strapi/strapi';
 
-module.exports = createCoreController('api::order.order', ({ strapi }) => ({
+const { MercadoPagoConfig, Preference } = require('mercadopago');
+
+export default factories.createCoreController('api::order.order', ({ strapi }) => ({
   async create(ctx) {
     try {
       const { buyerData, items, subtotal, shippingCost, total, shippingAddress } = ctx.request.body.data;

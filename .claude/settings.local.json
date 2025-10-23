@@ -8,7 +8,10 @@
       "Bash(npm install zod react-hook-form @hookform/resolvers @mercadopago/sdk-react)",
       "Bash(dir:*)",
       "Bash(npx strapi:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(findstr:*)",
+      "Bash(npm run strapi:*)",
+      "Bash(npm run develop:*)"
     ],
     "deny": [],
     "ask": []

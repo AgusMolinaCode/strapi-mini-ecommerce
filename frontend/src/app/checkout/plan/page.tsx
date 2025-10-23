@@ -7,6 +7,8 @@ import CheckoutFormPlan from '@/components/checkout/CheckoutFormPlan';
 import OrderSummary from '@/components/checkout/OrderSummary';
 import { ArrowLeft } from 'lucide-react';
 import type { CheckoutPlanFormData } from '@/lib/validations/checkout';
+import type { CreateSubscriptionData } from '@/lib/interface';
+import { createSubscription } from '@/data/actions/strapi';
 
 const CheckoutPlanPage = () => {
   const router = useRouter();
@@ -28,36 +30,23 @@ const CheckoutPlanPage = () => {
     setBuyerData(data);
 
     try {
-      const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
-
       if (!selectedPlan) {
         throw new Error('No hay plan seleccionado');
       }
 
-      // Crear suscripción en Strapi y obtener preapprovalId de MercadoPago
-      const response = await fetch(`${STRAPI_URL}/api/subscriptions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      // Preparar datos para la API usando el tipo correcto
+      const subscriptionData: CreateSubscriptionData = {
+        subscriberData: {
+          nombre: data.nombre,
+          email: data.email,
+          telefono: data.telefono,
         },
-        body: JSON.stringify({
-          data: {
-            subscriberData: {
-              nombre: data.nombre,
-              email: data.email,
-              telefono: data.telefono,
-            },
-            planId: selectedPlan.id,
-            frequency: 'monthly', // o extraerlo del plan
-          },
-        }),
-      });
+        planId: selectedPlan.id,
+        frequency: 'monthly', // o extraerlo del plan
+      };
 
-      if (!response.ok) {
-        throw new Error('Error al crear la suscripción');
-      }
-
-      const result = await response.json();
+      // Crear suscripción usando la función de strapi.ts
+      const result = await createSubscription(subscriptionData);
 
       // Guardar subscription ID en el store
       setPaymentStatus('success');
@@ -72,7 +61,13 @@ const CheckoutPlanPage = () => {
     } catch (error) {
       console.error('Error al procesar la suscripción:', error);
       setPaymentStatus('error');
-      alert('Error al procesar la suscripción. Por favor intenta nuevamente.');
+
+      // Mostrar mensaje de error más específico
+      const errorMessage = error instanceof Error
+        ? error.message
+        : 'Error al procesar la suscripción. Por favor intenta nuevamente.';
+
+      alert(errorMessage);
       setIsSubmitting(false);
     }
   };

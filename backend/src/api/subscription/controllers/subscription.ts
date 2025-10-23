@@ -1,14 +1,12 @@
-'use strict';
-
-const { MercadoPagoConfig, PreApproval } = require('mercadopago');
-
 /**
  * subscription controller
  */
 
-const { createCoreController } = require('@strapi/strapi').factories;
+import { factories } from '@strapi/strapi';
 
-module.exports = createCoreController('api::subscription.subscription', ({ strapi }) => ({
+const { MercadoPagoConfig, PreApproval } = require('mercadopago');
+
+export default factories.createCoreController('api::subscription.subscription', ({ strapi }) => ({
   async create(ctx) {
     try {
       const { subscriberData, planId, frequency } = ctx.request.body.data;
@@ -58,7 +56,7 @@ module.exports = createCoreController('api::subscription.subscription', ({ strap
         auto_recurring: {
           frequency: 1,
           frequency_type: frequency === 'monthly' ? 'months' : 'days',
-          transaction_amount: parseFloat(plan.precio),
+          transaction_amount: parseFloat(String(plan.precio)),
           currency_id: 'ARS',
           start_date: startDate.toISOString(),
         },

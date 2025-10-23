@@ -13,12 +13,14 @@
   "pluginOptions": {},
   "attributes": {
     "orderNumber": {
-      "type": "string",
-      "unique": true,
-      "required": true
+      "type": "text",
+      "required": true,
+      "unique": true
     },
     "status": {
       "type": "enumeration",
+      "required": true,
+      "default": "pending",
       "enum": [
         "pending",
         "approved",
@@ -27,9 +29,7 @@
         "shipped",
         "delivered",
         "cancelled"
-      ],
-      "default": "pending",
-      "required": true
+      ]
     },
     "preferenceId": {
       "type": "string"
