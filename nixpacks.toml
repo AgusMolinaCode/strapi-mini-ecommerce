@@ -1,0 +1,14 @@
+# Nixpacks configuration for Railway
+# This tells Railway to use the backend directory as the root
+
+[phases.setup]
+nixPkgs = ["nodejs_20", "npm-9_x"]
+
+[phases.install]
+cmds = ["cd backend && npm ci"]
+
+[phases.build]
+cmds = ["cd backend && npm run build"]
+
+[start]
+cmd = "cd backend && npm run start"
