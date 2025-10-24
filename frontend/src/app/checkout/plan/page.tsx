@@ -8,13 +8,19 @@ import OrderSummary from '@/components/checkout/OrderSummary';
 import { ArrowLeft } from 'lucide-react';
 import type { CheckoutPlanFormData } from '@/lib/validations/checkout';
 import type { CreateSubscriptionData } from '@/lib/interface';
-import { createSubscription } from '@/data/actions/strapi';
+import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
+
+// Inicializar MercadoPago solo en el cliente
+if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY) {
+  initMercadoPago(process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY, { locale: 'es-AR' });
+}
 
 const CheckoutPlanPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { selectedPlan, setBuyerData, setPaymentStatus } = useCheckoutStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [preferenceId, setPreferenceId] = useState<string | null>(null);
 
   // Redirect if no plan selected
   useEffect(() => {
@@ -34,7 +40,7 @@ const CheckoutPlanPage = () => {
         throw new Error('No hay plan seleccionado');
       }
 
-      // Preparar datos para la API usando el tipo correcto
+      // Preparar datos para la suscripción en Strapi
       const subscriptionData: CreateSubscriptionData = {
         subscriberData: {
           nombre: data.nombre,
@@ -42,27 +48,54 @@ const CheckoutPlanPage = () => {
           telefono: data.telefono,
         },
         planId: selectedPlan.id,
-        frequency: 'monthly', // o extraerlo del plan
+        frequency: 'monthly',
       };
 
-      // Crear suscripción usando la función de strapi.ts
-      const result = await createSubscription(subscriptionData);
+      // 1. Crear suscripción en Strapi
+      const strapiResponse = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/subscriptions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: subscriptionData }),
+      });
 
-      // Guardar subscription ID en el store
-      setPaymentStatus('success');
+      if (!strapiResponse.ok) {
+        throw new Error('Error al crear la suscripción en Strapi');
+      }
 
-      // Redirigir a MercadoPago
-      if (result.initPoint) {
-        window.location.href = result.initPoint;
+      const strapiData = await strapiResponse.json();
+
+      // 2. Crear suscripción de MercadoPago
+      const mpResponse = await fetch('/api/mercadopago-subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subscriberData: subscriptionData.subscriberData,
+          planName: selectedPlan.nombre,
+          planPrice: selectedPlan.precio,
+          frequency: subscriptionData.frequency,
+        }),
+      });
+
+      if (!mpResponse.ok) {
+        const mpError = await mpResponse.json();
+        console.error('MercadoPago error:', mpError);
+        throw new Error(mpError.error || 'Error al crear la suscripción de MercadoPago');
+      }
+
+      const mpData = await mpResponse.json();
+
+      // Guardar preapprovalId para mostrar el botón de MercadoPago
+      if (mpData.preapprovalId) {
+        setPreferenceId(mpData.preapprovalId);
+        setPaymentStatus('success');
       } else {
-        throw new Error('No se recibió el link de pago');
+        throw new Error('No se recibió el preapprovalId de MercadoPago');
       }
 
     } catch (error) {
       console.error('Error al procesar la suscripción:', error);
       setPaymentStatus('error');
 
-      // Mostrar mensaje de error más específico
       const errorMessage = error instanceof Error
         ? error.message
         : 'Error al procesar la suscripción. Por favor intenta nuevamente.';
@@ -114,10 +147,24 @@ const CheckoutPlanPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Form - 3 columns */}
           <div className="lg:col-span-3">
-            <CheckoutFormPlan
-              onSubmit={handleFormSubmit}
-              isSubmitting={isSubmitting}
-            />
+            {!preferenceId ? (
+              <CheckoutFormPlan
+                onSubmit={handleFormSubmit}
+                isSubmitting={isSubmitting}
+              />
+            ) : (
+              <div className="bg-white rounded-2xl shadow-lg p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  Suscripción creada exitosamente
+                </h2>
+                <p className="text-gray-600 mb-6">
+                  Haz click en el botón de MercadoPago para activar tu suscripción de forma segura.
+                </p>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <Wallet initialization={{ preferenceId, redirectMode: 'blank' }} />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Order Summary - 2 columns */}

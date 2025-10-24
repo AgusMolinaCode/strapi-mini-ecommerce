@@ -9,7 +9,12 @@ import OrderSummary from '@/components/checkout/OrderSummary';
 import { ArrowLeft } from 'lucide-react';
 import type { CheckoutProductFormData } from '@/lib/validations/checkout';
 import type { CreateOrderData } from '@/lib/interface';
-import { createOrder } from '@/data/actions/strapi';
+import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
+
+// Inicializar MercadoPago solo en el cliente
+if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY) {
+  initMercadoPago(process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY, { locale: 'es-AR' });
+}
 
 const CheckoutPage = () => {
   const router = useRouter();
@@ -17,6 +22,7 @@ const CheckoutPage = () => {
   const { setBuyerData, setPaymentStatus } = useCheckoutStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [preferenceId, setPreferenceId] = useState<string | null>(null);
 
   // Prevent hydration mismatch by only rendering after client mount
   useEffect(() => {
@@ -38,10 +44,10 @@ const CheckoutPage = () => {
     try {
       // Calcular totales
       const subtotal = items.reduce((total, item) => total + item.precio * item.quantity, 0);
-      const shippingCost = 0; // Puedes calcular esto según la ubicación
+      const shippingCost = 0;
       const total = subtotal + shippingCost;
 
-      // Preparar datos para la API usando el tipo correcto
+      // Preparar datos para la orden en Strapi
       const orderData: CreateOrderData = {
         buyerData: {
           nombre: data.nombre,
@@ -70,24 +76,54 @@ const CheckoutPage = () => {
         },
       };
 
-      // Crear orden usando la función de strapi.ts
-      const result = await createOrder(orderData);
+      // 1. Crear orden en Strapi
+      const strapiResponse = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: orderData }),
+      });
 
-      // Guardar orden ID en el store
-      setPaymentStatus('success');
+      if (!strapiResponse.ok) {
+        throw new Error('Error al crear la orden en Strapi');
+      }
 
-      // Redirigir a MercadoPago
-      if (result.initPoint) {
-        window.location.href = result.initPoint;
+      const strapiData = await strapiResponse.json();
+
+      // 2. Crear preferencia de MercadoPago
+      const mpResponse = await fetch('/api/mercadopago', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          buyerData: orderData.buyerData,
+          items: orderData.items,
+          subtotal: orderData.subtotal,
+          shippingCost: orderData.shippingCost,
+          total: orderData.total,
+          shippingAddress: orderData.shippingAddress,
+          orderNumber: strapiData.order.orderNumber,
+        }),
+      });
+
+      if (!mpResponse.ok) {
+        const mpError = await mpResponse.json();
+        console.error('MercadoPago error:', mpError);
+        throw new Error(mpError.error || 'Error al crear la preferencia de MercadoPago');
+      }
+
+      const mpData = await mpResponse.json();
+
+      // Guardar preferenceId para mostrar el botón de MercadoPago
+      if (mpData.preferenceId) {
+        setPreferenceId(mpData.preferenceId);
+        setPaymentStatus('success');
       } else {
-        throw new Error('No se recibió el link de pago');
+        throw new Error('No se recibió el preferenceId de MercadoPago');
       }
 
     } catch (error) {
       console.error('Error al procesar el pago:', error);
       setPaymentStatus('error');
 
-      // Mostrar mensaje de error más específico
       const errorMessage = error instanceof Error
         ? error.message
         : 'Error al procesar el pago. Por favor intenta nuevamente.';
@@ -138,10 +174,24 @@ const CheckoutPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Form - 3 columns */}
           <div className="lg:col-span-3">
-            <CheckoutFormProduct
-              onSubmit={handleFormSubmit}
-              isSubmitting={isSubmitting}
-            />
+            {!preferenceId ? (
+              <CheckoutFormProduct
+                onSubmit={handleFormSubmit}
+                isSubmitting={isSubmitting}
+              />
+            ) : (
+              <div className="bg-white rounded-2xl shadow-lg p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  Orden creada exitosamente
+                </h2>
+                <p className="text-gray-600 mb-6">
+                  Haz click en el botón de MercadoPago para completar tu pago de forma segura.
+                </p>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <Wallet initialization={{ preferenceId }} />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Order Summary - 2 columns */}

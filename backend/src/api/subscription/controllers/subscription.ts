@@ -4,8 +4,6 @@
 
 import { factories } from '@strapi/strapi';
 
-const { MercadoPagoConfig, PreApproval } = require('mercadopago');
-
 export default factories.createCoreController('api::subscription.subscription', ({ strapi }) => ({
   async create(ctx) {
     try {
@@ -39,50 +37,12 @@ export default factories.createCoreController('api::subscription.subscription', 
         },
       });
 
-      // Configurar MercadoPago
-      const client = new MercadoPagoConfig({
-        accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN,
-      });
-
-      const preApproval = new PreApproval(client);
-
-      // Calcular fecha de inicio y siguiente cobro
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() + 1); // Empieza mañana
-
-      // Crear pre-approval (suscripción) en MercadoPago
-      const preApprovalData = {
-        reason: `Suscripción ${plan.nombre}`,
-        auto_recurring: {
-          frequency: 1,
-          frequency_type: frequency === 'monthly' ? 'months' : 'days',
-          transaction_amount: parseFloat(String(plan.precio)),
-          currency_id: 'ARS',
-          start_date: startDate.toISOString(),
-        },
-        back_url: `${process.env.FRONTEND_URL}/checkout/success?subscriptionId=${subscription.id}`,
-        external_reference: externalReference,
-        payer_email: subscriberData.email,
-      };
-
-      const response = await preApproval.create({ body: preApprovalData });
-
-      // Actualizar suscripción con preapprovalId
-      await strapi.entityService.update('api::subscription.subscription', subscription.id, {
-        data: {
-          preapprovalId: response.id,
-          startDate: startDate,
-        },
-      });
-
-      // Devolver suscripción y initPoint al frontend
+      // Devolver suscripción al frontend
       return ctx.send({
         subscription: {
           id: subscription.id,
           status: subscription.status,
         },
-        preapprovalId: response.id,
-        initPoint: response.init_point,
       });
 
     } catch (error) {

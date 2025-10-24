@@ -4,8 +4,6 @@
 
 import { factories } from '@strapi/strapi';
 
-const { MercadoPagoConfig, Preference } = require('mercadopago');
-
 export default factories.createCoreController('api::order.order', ({ strapi }) => ({
   async create(ctx) {
     try {
@@ -47,75 +45,13 @@ export default factories.createCoreController('api::order.order', ({ strapi }) =
         },
       });
 
-      // Configurar MercadoPago
-      const client = new MercadoPagoConfig({
-        accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN,
-      });
-
-      const preference = new Preference(client);
-
-      // Preparar items para MercadoPago
-      const mpItems = items.map(item => ({
-        title: item.title,
-        unit_price: parseFloat(item.unitPrice),
-        quantity: item.quantity,
-        currency_id: 'ARS',
-      }));
-
-      // Agregar costo de envío si existe
-      if (shippingCost && shippingCost > 0) {
-        mpItems.push({
-          title: 'Envío',
-          unit_price: parseFloat(shippingCost),
-          quantity: 1,
-          currency_id: 'ARS',
-        });
-      }
-
-      // Crear preferencia de pago en MercadoPago
-      const preferenceData = {
-        items: mpItems,
-        payer: {
-          name: buyerData.nombre,
-          email: buyerData.email,
-          phone: {
-            number: buyerData.telefono
-          },
-          address: {
-            street_name: shippingAddress.direccion,
-            street_number: shippingAddress.numero,
-            zip_code: shippingAddress.codigoPostal
-          }
-        },
-        back_urls: {
-          success: `${process.env.FRONTEND_URL}/checkout/success?orderId=${order.id}`,
-          failure: `${process.env.FRONTEND_URL}/checkout/error?orderId=${order.id}`,
-          pending: `${process.env.FRONTEND_URL}/checkout/success?orderId=${order.id}`
-        },
-        auto_return: 'approved',
-        external_reference: externalReference,
-        notification_url: `${process.env.FRONTEND_URL}/api/mercadopago/webhook`,
-        statement_descriptor: 'FitPro',
-      };
-
-      const response = await preference.create({ body: preferenceData });
-
-      // Actualizar orden con preferenceId
-      await strapi.entityService.update('api::order.order', order.id, {
-        data: {
-          preferenceId: response.id,
-        },
-      });
-
-      // Devolver orden y preferenceId al frontend
+      // Devolver orden al frontend
       return ctx.send({
         order: {
           id: order.id,
           orderNumber: order.orderNumber,
           status: order.status,
         },
-        preferenceId: response.id,
-        initPoint: response.init_point,
       });
 
     } catch (error) {
