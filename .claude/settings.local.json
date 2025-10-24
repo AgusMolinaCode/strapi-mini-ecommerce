@@ -11,7 +11,21 @@
       "Bash(npm install:*)",
       "Bash(findstr:*)",
       "Bash(npm run strapi:*)",
-      "Bash(npm run develop:*)"
+      "Bash(npm run develop:*)",
+      "Bash(cat:*)",
+      "Bash(timeout 5 npm run dev)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nConfigure Railway PostgreSQL database and remove MercadoPago\n\nBackend changes:\n- Add PostgreSQL driver (pg) for Railway database connection\n- Configure Railway PostgreSQL credentials in environment\n- Remove MercadoPago integration (controllers, routes, webhooks)\n- Remove MercadoPago dependencies from package.json\n- Update database client from sqlite to postgres\n\nFrontend changes:\n- Update MercadoPago integration and checkout flows\n- Add API routes for payment processing\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push)",
+      "Bash(sqlite3:*)",
+      "Bash(node scripts/export-sqlite-data.js:*)",
+      "Bash(node scripts/import-to-postgresql.js:*)",
+      "Bash(node -e:*)",
+      "Bash(node scripts/check-tables.js:*)",
+      "Bash(git commit:*)",
+      "Bash(test:*)"
     ],
     "deny": [],
     "ask": []
