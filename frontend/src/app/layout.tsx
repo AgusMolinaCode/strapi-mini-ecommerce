@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
 import "./globals.css";
 import { NavbarDemo } from "@/components/navbar/NavbarDemo";
 import Footer from "@/components/footer/footer";
-
-const outfit = Outfit({
-  weight: "400",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,7 +16,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${outfit.className} scroll-smooth`}
+      className="scroll-smooth font-sans"
       suppressHydrationWarning
     >
       <body className="antialiased">

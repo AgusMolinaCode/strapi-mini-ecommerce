@@ -4,6 +4,8 @@ import { getPlans } from "@/data/actions/strapi";
 import type { Plan } from "@/lib/interface";
 import PlanCard from "./PlanCard";
 
+export const dynamic = 'force-dynamic';
+
 const getEstiloBoton = (popular: boolean | null): string => {
   return popular
     ? "bg-red-500 text-white hover:bg-red-600"

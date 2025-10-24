@@ -7,6 +7,8 @@ import { getStrapiData } from "@/data/actions/strapi";
 import { ProductosResponse, CategoriasResponse } from "@/lib/interface";
 import Image from "next/image";
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const strapiData = await getStrapiData("/api/home-page?populate=*");
   const dataProductos: ProductosResponse = await getStrapiData(
