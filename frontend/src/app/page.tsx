@@ -7,6 +7,9 @@ import { getStrapiData } from "@/data/actions/strapi";
 import { ProductosResponse, CategoriasResponse } from "@/lib/interface";
 import Image from "next/image";
 
+// ISR: Revalidar cada 60 segundos
+export const revalidate = 60;
+
 export default async function Home() {
   const strapiData = await getStrapiData("/api/home-page?populate=*");
   const dataProductos: ProductosResponse = await getStrapiData(

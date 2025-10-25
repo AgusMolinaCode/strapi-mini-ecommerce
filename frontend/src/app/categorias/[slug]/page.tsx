@@ -4,6 +4,9 @@ import { Producto, ProductosResponse, Categoria, CategoriasResponse } from '@/li
 import ProductCard from '@/components/product/ProductCard';
 import CategoryFilter from '@/components/category/CategoryFilter';
 
+// ISR: Revalidar cada 60 segundos
+export const revalidate = 60;
+
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
 }

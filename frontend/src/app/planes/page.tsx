@@ -4,6 +4,9 @@ import { getPlans } from "@/data/actions/strapi";
 import type { Plan } from "@/lib/interface";
 import PlanCard from "./PlanCard";
 
+// ISR: Revalidar cada 60 segundos
+export const revalidate = 60;
+
 const getEstiloBoton = (popular: boolean | null): string => {
   return popular
     ? "bg-red-500 text-white hover:bg-red-600"
