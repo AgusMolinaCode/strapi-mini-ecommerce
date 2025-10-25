@@ -16,6 +16,7 @@ export default async function Home() {
     "/api/categorias?populate=imagen"
   );
 
+
   return (
     <div>
       <HeroSection data={strapiData.data} />

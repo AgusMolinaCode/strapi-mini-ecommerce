@@ -25,7 +25,11 @@
       "Bash(node -e:*)",
       "Bash(node scripts/check-tables.js:*)",
       "Bash(git commit:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(yarn --version:*)",
+      "Bash(yarn install)",
+      "Bash(yarn strapi help transfer:*)",
+      "Bash(if exist node_modules echo node_modules directory exists)"
     ],
     "deny": [],
     "ask": []

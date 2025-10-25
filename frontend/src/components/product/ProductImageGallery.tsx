@@ -84,10 +84,11 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
 
   // Handle single image case - no carousel needed
   if (images.length === 1) {
+    const imageUrl = images[0].url.startsWith('http') ? images[0].url : `${baseUrl}${images[0].url}`;
     return (
       <div className="bg-gray-100 rounded-xl overflow-hidden relative h-96 md:h-[500px] lg:h-[700px]">
         <Image
-          src={`${baseUrl}${images[0].url}`}
+          src={imageUrl}
           alt={images[0].alternativeText || productTitle}
           fill
           className="object-cover"
@@ -105,22 +106,25 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
       <div className="relative">
         <div className="overflow-hidden rounded-xl" ref={emblaMainRef}>
           <div className="flex">
-            {images.map((image, index) => (
-              <div
-                key={image.id}
-                className="flex-[0_0_100%] min-w-0 relative h-96 md:h-[500px] lg:h-[700px]"
-              >
-                <Image
-                  src={`${baseUrl}${image.url}`}
-                  alt={image.alternativeText || `${productTitle} - Imagen ${index + 1}`}
-                  fill
-                  className="object-cover"
-                  priority={index === 0}
-                  loading={index === 0 ? undefined : 'lazy'}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 700px"
-                />
-              </div>
-            ))}
+            {images.map((image, index) => {
+              const imageUrl = image.url.startsWith('http') ? image.url : `${baseUrl}${image.url}`;
+              return (
+                <div
+                  key={image.id}
+                  className="flex-[0_0_100%] min-w-0 relative h-96 md:h-[500px] lg:h-[700px]"
+                >
+                  <Image
+                    src={imageUrl}
+                    alt={image.alternativeText || `${productTitle} - Imagen ${index + 1}`}
+                    fill
+                    className="object-cover"
+                    priority={index === 0}
+                    loading={index === 0 ? undefined : 'lazy'}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 700px"
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -149,27 +153,30 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
       {/* Thumbnail Carousel */}
       <div className="overflow-hidden px-1" ref={emblaThumbsRef}>
         <div className="flex gap-4 md:gap-6 lg:gap-8">
-          {images.map((image, index) => (
-            <button
-              key={image.id}
-              onClick={() => onThumbClick(index)}
-              className={`flex-[0_0_auto] relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-xl overflow-hidden cursor-pointer transition-all duration-200 border-4 ${
-                index === selectedIndex
-                  ? 'border-red-500 opacity-100 shadow-lg'
-                  : 'border-gray-300 opacity-70 hover:opacity-100 hover:border-red-300 '
-              }`}
-              aria-label={`Ver imagen ${index + 1}`}
-            >
-              <Image
-                src={`${baseUrl}${image.url}`}
-                alt={`Thumbnail ${index + 1}`}
-                fill
-                className="object-cover"
-                loading="lazy"
-                sizes="(max-width: 768px) 80px, (max-width: 1024px) 96px, 112px"
-              />
-            </button>
-          ))}
+          {images.map((image, index) => {
+            const imageUrl = image.url.startsWith('http') ? image.url : `${baseUrl}${image.url}`;
+            return (
+              <button
+                key={image.id}
+                onClick={() => onThumbClick(index)}
+                className={`flex-[0_0_auto] relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-xl overflow-hidden cursor-pointer transition-all duration-200 border-4 ${
+                  index === selectedIndex
+                    ? 'border-red-500 opacity-100 shadow-lg'
+                    : 'border-gray-300 opacity-70 hover:opacity-100 hover:border-red-300 '
+                }`}
+                aria-label={`Ver imagen ${index + 1}`}
+              >
+                <Image
+                  src={imageUrl}
+                  alt={`Thumbnail ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  loading="lazy"
+                  sizes="(max-width: 768px) 80px, (max-width: 1024px) 96px, 112px"
+                />
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

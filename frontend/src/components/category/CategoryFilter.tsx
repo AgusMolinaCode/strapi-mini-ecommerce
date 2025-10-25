@@ -62,7 +62,7 @@ const CategoryFilter = ({
                 >
                   {categoria.imagen ? (
                     <Image
-                      src={`${baseUrl}${categoria.imagen.url}`}
+                      src={categoria.imagen.url.startsWith('http') ? categoria.imagen.url : `${baseUrl}${categoria.imagen.url}`}
                       alt={categoria.imagen.alternativeText || categoria.nombre}
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-300"

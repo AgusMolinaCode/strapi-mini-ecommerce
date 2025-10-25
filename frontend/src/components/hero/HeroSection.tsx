@@ -9,9 +9,9 @@ interface HeroSectionProps {
 
 export default function HeroSection({ data }: HeroSectionProps) {
   const imageUrl = data.imagen?.url
-    ? `${process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"}${
-        data.imagen.url
-      }`
+    ? data.imagen.url.startsWith('http')
+      ? data.imagen.url
+      : `${process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"}${data.imagen.url}`
     : null;
 
   return (

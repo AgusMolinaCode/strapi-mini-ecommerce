@@ -9,6 +9,18 @@ const nextConfig: NextConfig = {
         port: '1337',
         pathname: '/uploads/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'promising-idea-4d959c5796.strapiapp.com',
+        port: '',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'promising-idea-4d959c5796.media.strapiapp.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCheckoutStore } from '@/store/checkoutStore';
 import CheckoutFormPlan from '@/components/checkout/CheckoutFormPlan';
@@ -15,7 +15,7 @@ if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_
   initMercadoPago(process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY, { locale: 'es-AR' });
 }
 
-const CheckoutPlanPage = () => {
+const CheckoutPlanContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { selectedPlan, setBuyerData, setPaymentStatus } = useCheckoutStore();
@@ -182,6 +182,21 @@ const CheckoutPlanPage = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const CheckoutPlanPage = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 py-28 md:py-32 px-4 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Cargando checkout...</p>
+        </div>
+      </div>
+    }>
+      <CheckoutPlanContent />
+    </Suspense>
   );
 };
 

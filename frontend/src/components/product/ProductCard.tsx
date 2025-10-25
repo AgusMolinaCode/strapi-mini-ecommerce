@@ -23,6 +23,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
     e.stopPropagation();
 
     if (producto.stock > 0) {
+      const imageUrl = producto.imagenes?.[0]?.url
+        ? producto.imagenes[0].url.startsWith('http')
+          ? producto.imagenes[0].url
+          : `${baseUrl}${producto.imagenes[0].url}`
+        : "";
+
       addItem(
         {
           id: producto.id,
@@ -30,9 +36,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           titulo: producto.titulo,
           precio: producto.precio,
           stock: producto.stock,
-          imagen: producto.imagenes?.[0]?.url
-            ? `${baseUrl}${producto.imagenes[0].url}`
-            : "",
+          imagen: imageUrl,
           slug: producto.slug,
         },
         1
@@ -49,7 +53,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <div className="relative h-48 md:h-64 lg:h-72 bg-gray-100 overflow-hidden">
         {producto.imagenes && producto.imagenes.length > 0 ? (
           <Image
-            src={`${baseUrl}${producto.imagenes[0].url}`}
+            src={producto.imagenes[0].url.startsWith('http') ? producto.imagenes[0].url : `${baseUrl}${producto.imagenes[0].url}`}
             alt={producto.imagenes[0].alternativeText || producto.titulo}
             fill
             className="object-cover hover:scale-105 transition-transform duration-300"

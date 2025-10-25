@@ -87,13 +87,19 @@ const ProductPage = () => {
 
   const handleAddToCart = () => {
     if (product && product.stock > 0) {
+      const imageUrl = product.imagenes?.[0]?.url
+        ? product.imagenes[0].url.startsWith('http')
+          ? product.imagenes[0].url
+          : `${baseUrl}${product.imagenes[0].url}`
+        : '';
+
       addItem({
         id: product.id,
         documentId: product.documentId,
         titulo: product.titulo,
         precio: product.precio,
         stock: product.stock,
-        imagen: product.imagenes?.[0]?.url ? `${baseUrl}${product.imagenes[0].url}` : '',
+        imagen: imageUrl,
         slug: product.slug,
       }, quantity);
     }
