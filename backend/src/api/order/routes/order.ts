@@ -24,5 +24,25 @@ export default {
         middlewares: [],
       },
     },
+    {
+      method: 'POST',
+      path: '/orders/mercadopago-webhook',
+      handler: 'order.mercadopagoWebhook',
+      config: {
+        auth: false,
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: 'POST',
+      path: '/orders/update-payment-status',
+      handler: 'order.updatePaymentStatus',
+      config: {
+        auth: false,
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 };

@@ -40,6 +40,11 @@ function SuccessContent() {
           ? `${STRAPI_URL}/api/orders/${orderId}`
           : `${STRAPI_URL}/api/subscriptions/${subscriptionId}`;
 
+        console.log('Fetching order from:', endpoint);
+
+        // Esperar un poco para dar tiempo al webhook de actualizar
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
         const response = await fetch(endpoint);
 
         if (!response.ok) {
@@ -47,10 +52,12 @@ function SuccessContent() {
         }
 
         const result = await response.json();
+        console.log('Order data:', result.data);
+
         setOrder(result.data);
 
-        // Limpiar carrito solo si es una orden de productos
-        if (orderId) {
+        // Limpiar carrito solo si es una orden de productos aprobada
+        if (orderId && (result.data.status === 'approved' || result.data.status === 'pending')) {
           clearCart();
         }
 

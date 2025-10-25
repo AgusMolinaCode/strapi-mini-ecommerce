@@ -88,6 +88,10 @@ const CheckoutPage = () => {
       }
 
       const strapiData = await strapiResponse.json();
+      const orderId = strapiData.order.id;
+      const externalReference = strapiData.order.externalReference;
+
+      console.log('Orden creada:', strapiData.order);
 
       // 2. Crear preferencia de MercadoPago
       const mpResponse = await fetch('/api/mercadopago', {
@@ -101,6 +105,8 @@ const CheckoutPage = () => {
           total: orderData.total,
           shippingAddress: orderData.shippingAddress,
           orderNumber: strapiData.order.orderNumber,
+          orderId,
+          externalReference,
         }),
       });
 
