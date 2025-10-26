@@ -80,7 +80,6 @@ const CheckoutPlanContent = () => {
 
       if (!mpResponse.ok) {
         const mpError = await mpResponse.json();
-        console.error('MercadoPago error:', mpError);
         throw new Error(mpError.error || 'Error al crear la suscripción de MercadoPago');
       }
 

@@ -32,7 +32,11 @@
       "Bash(if exist node_modules echo node_modules directory exists)",
       "mcp__mercadopago-mcp-server__quality_checklist",
       "mcp__mercadopago-mcp-server__notifications_history",
-      "mcp__mercadopago-mcp-server__search_documentation"
+      "mcp__mercadopago-mcp-server__search_documentation",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(node test-mp-config.js:*)",
+      "Bash(del test-mp-config.js)"
     ],
     "deny": [],
     "ask": []
