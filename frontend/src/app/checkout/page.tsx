@@ -51,8 +51,10 @@ const CheckoutPage = () => {
       const orderData: CreateOrderData = {
         buyerData: {
           nombre: data.nombre,
+          apellido: data.apellido,
           email: data.email,
           telefono: data.telefono,
+          dni: data.dni,
         },
         items: items.map(item => ({
           productId: item.id,

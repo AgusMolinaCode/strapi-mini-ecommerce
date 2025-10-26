@@ -44,8 +44,10 @@ const CheckoutPlanContent = () => {
       const subscriptionData: CreateSubscriptionData = {
         subscriberData: {
           nombre: data.nombre,
+          apellido: data.apellido,
           email: data.email,
           telefono: data.telefono,
+          dni: data.dni,
         },
         planId: selectedPlan.id,
         frequency: 'monthly',

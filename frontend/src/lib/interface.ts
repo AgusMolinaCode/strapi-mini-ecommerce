@@ -183,8 +183,10 @@ export interface OrderItem {
 
 export interface BuyerData {
   nombre: string;
+  apellido: string;
   email: string;
   telefono: string;
+  dni: string;
 }
 
 export interface ShippingAddress {
@@ -251,8 +253,10 @@ export interface GetOrderResponse {
 
 export interface SubscriberData {
   nombre: string;
+  apellido: string;
   email: string;
   telefono: string;
+  dni: string;
 }
 
 export interface CreateSubscriptionData {

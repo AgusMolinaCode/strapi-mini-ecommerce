@@ -30,23 +30,43 @@ const CheckoutFormProduct: React.FC<CheckoutFormProductProps> = ({ onSubmit, isS
         </h2>
 
         <div className="space-y-5">
-          {/* Nombre */}
-          <div>
-            <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-2">
-              Nombre Completo *
-            </label>
-            <input
-              {...register('nombre')}
-              type="text"
-              id="nombre"
-              placeholder="Juan Pérez"
-              className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all ${
-                errors.nombre ? 'border-red-500' : 'border-gray-300'
-              }`}
-            />
-            {errors.nombre && (
-              <p className="mt-2 text-sm text-red-600">{errors.nombre.message}</p>
-            )}
+          {/* Nombre y Apellido */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-2">
+                Nombre *
+              </label>
+              <input
+                {...register('nombre')}
+                type="text"
+                id="nombre"
+                placeholder="Juan"
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all ${
+                  errors.nombre ? 'border-red-500' : 'border-gray-300'
+                }`}
+              />
+              {errors.nombre && (
+                <p className="mt-2 text-sm text-red-600">{errors.nombre.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="apellido" className="block text-sm font-medium text-gray-700 mb-2">
+                Apellido *
+              </label>
+              <input
+                {...register('apellido')}
+                type="text"
+                id="apellido"
+                placeholder="Pérez"
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all ${
+                  errors.apellido ? 'border-red-500' : 'border-gray-300'
+                }`}
+              />
+              {errors.apellido && (
+                <p className="mt-2 text-sm text-red-600">{errors.apellido.message}</p>
+              )}
+            </div>
           </div>
 
           {/* Email */}
@@ -69,24 +89,45 @@ const CheckoutFormProduct: React.FC<CheckoutFormProductProps> = ({ onSubmit, isS
             )}
           </div>
 
-          {/* Teléfono */}
-          <div>
-            <label htmlFor="telefono" className="block text-sm font-medium text-gray-700 mb-2">
-              <Phone className="w-4 h-4 inline mr-1" />
-              Teléfono *
-            </label>
-            <input
-              {...register('telefono')}
-              type="tel"
-              id="telefono"
-              placeholder="1123456789"
-              className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all ${
-                errors.telefono ? 'border-red-500' : 'border-gray-300'
-              }`}
-            />
-            {errors.telefono && (
-              <p className="mt-2 text-sm text-red-600">{errors.telefono.message}</p>
-            )}
+          {/* Teléfono y DNI */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="telefono" className="block text-sm font-medium text-gray-700 mb-2">
+                <Phone className="w-4 h-4 inline mr-1" />
+                Teléfono *
+              </label>
+              <input
+                {...register('telefono')}
+                type="tel"
+                id="telefono"
+                placeholder="1123456789"
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all ${
+                  errors.telefono ? 'border-red-500' : 'border-gray-300'
+                }`}
+              />
+              {errors.telefono && (
+                <p className="mt-2 text-sm text-red-600">{errors.telefono.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="dni" className="block text-sm font-medium text-gray-700 mb-2">
+                <User className="w-4 h-4 inline mr-1" />
+                DNI *
+              </label>
+              <input
+                {...register('dni')}
+                type="text"
+                id="dni"
+                placeholder="12345678"
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all ${
+                  errors.dni ? 'border-red-500' : 'border-gray-300'
+                }`}
+              />
+              {errors.dni && (
+                <p className="mt-2 text-sm text-red-600">{errors.dni.message}</p>
+              )}
+            </div>
           </div>
         </div>
       </div>
