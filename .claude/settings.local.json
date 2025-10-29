@@ -36,7 +36,8 @@
       "mcp__context7__resolve-library-id",
       "mcp__context7__get-library-docs",
       "Bash(node test-mp-config.js:*)",
-      "Bash(del test-mp-config.js)"
+      "Bash(del test-mp-config.js)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

@@ -11,20 +11,15 @@ interface CheckoutStore {
   paymentStatus: 'idle' | 'processing' | 'success' | 'error';
   setPaymentStatus: (status: 'idle' | 'processing' | 'success' | 'error') => void;
 
-  // Datos del comprador
-  buyerData: {
+  // Datos del suscriptor (solo para planes)
+  subscriberData: {
     nombre?: string;
+    apellido?: string;
     email?: string;
     telefono?: string;
-    direccion?: string;
-    numero?: string;
-    piso?: string;
-    ciudad?: string;
-    provincia?: string;
-    codigoPostal?: string;
-    notas?: string;
+    dni?: string;
   } | null;
-  setBuyerData: (data: CheckoutStore['buyerData']) => void;
+  setSubscriberData: (data: CheckoutStore['subscriberData']) => void;
 
   // Preferencia de MercadoPago
   preferenceId: string | null;
@@ -43,8 +38,8 @@ export const useCheckoutStore = create<CheckoutStore>()(
       paymentStatus: 'idle',
       setPaymentStatus: (status) => set({ paymentStatus: status }),
 
-      buyerData: null,
-      setBuyerData: (data) => set({ buyerData: data }),
+      subscriberData: null,
+      setSubscriberData: (data) => set({ subscriberData: data }),
 
       preferenceId: null,
       setPreferenceId: (id) => set({ preferenceId: id }),
@@ -53,7 +48,7 @@ export const useCheckoutStore = create<CheckoutStore>()(
         set({
           selectedPlan: null,
           paymentStatus: 'idle',
-          buyerData: null,
+          subscriberData: null,
           preferenceId: null,
         }),
     }),
@@ -61,7 +56,7 @@ export const useCheckoutStore = create<CheckoutStore>()(
       name: 'fitpro-checkout',
       partialize: (state) => ({
         selectedPlan: state.selectedPlan,
-        buyerData: state.buyerData,
+        subscriberData: state.subscriberData,
       }),
     }
   )

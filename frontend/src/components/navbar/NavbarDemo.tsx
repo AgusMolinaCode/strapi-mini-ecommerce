@@ -10,8 +10,6 @@ import {
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
 import { useState } from "react";
-import CartButton from "@/components/cart/CartButton";
-import CartDrawer from "@/components/cart/CartDrawer";
 
 export function NavbarDemo() {
   const navItems = [
@@ -22,10 +20,6 @@ export function NavbarDemo() {
     {
       name: "Planes",
       link: "/planes",
-    },
-    {
-      name: "Tienda",
-      link: "/categorias/todos",
     },
   ];
 
@@ -38,9 +32,6 @@ export function NavbarDemo() {
         <NavBody>
           <NavbarLogo />
           <NavItems items={navItems} />
-          <div className="flex items-center gap-4">
-            <CartButton variant="desktop" />
-          </div>
         </NavBody>
 
         {/* Mobile Navigation */}
@@ -48,7 +39,6 @@ export function NavbarDemo() {
           <MobileNavHeader>
             <NavbarLogo />
             <div className="flex items-center gap-3 pr-2">
-              <CartButton variant="mobile" />
               <MobileNavToggle
                 isOpen={isMobileMenuOpen}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -73,9 +63,6 @@ export function NavbarDemo() {
           </MobileNavMenu>
         </MobileNav>
       </Navbar>
-
-      {/* Cart Drawer */}
-      <CartDrawer />
     </div>
   );
 }

@@ -43,63 +43,6 @@ export interface Imagen {
 // Alias for compatibility
 export type StrapiImage = Imagen;
 
-export interface ProductoSimple {
-  id: number;
-  documentId: string;
-  titulo: string;
-  descripcion: string;
-  precio: number;
-  precio_anterior: number;
-  stock: number;
-  slug: string;
-  destacado: boolean;
-  en_oferta: boolean;
-  activo: boolean | null;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-}
-
-export interface Categoria {
-  id: number;
-  documentId: string;
-  nombre: string;
-  descripcion: string;
-  slug: string;
-  imagen: Imagen;
-  productos: ProductoSimple[];
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-}
-
-export interface Producto {
-  id: number;
-  documentId: string;
-  titulo: string;
-  descripcion: string;
-  precio: number;
-  precio_anterior: number;
-  stock: number;
-  slug: string;
-  destacado: boolean;
-  en_oferta: boolean;
-  activo: boolean | null;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-  imagenes: Imagen[];
-  categorias: Categoria[];
-}
-
-export interface ProductosResponse {
-  data: Producto[];
-}
-
-export interface CategoriasResponse {
-  data: Categoria[];
-}
-
 // HomePage interface
 export interface HomePage {
   id: number;
@@ -118,7 +61,10 @@ export interface StrapiResponse<T> {
   meta: Record<string, any>;
 }
 
-// Plan interfaces
+// ============================================
+// PLANS - Planes y suscripciones
+// ============================================
+
 export interface PlanFeature {
   id: number;
   text: string;
@@ -156,99 +102,8 @@ export interface PlansResponse {
   };
 }
 
-// Cart interfaces
-export interface CartItem {
-  id: number;
-  documentId: string;
-  titulo: string;
-  precio: number;
-  quantity: number;
-  stock: number;
-  imagen: string;
-  slug: string;
-}
-
 // ============================================
-// ORDERS - Productos físicos
-// ============================================
-
-export interface OrderItem {
-  productId: number;
-  title: string;
-  quantity: number;
-  unitPrice: number;
-  subtotal: number;
-  image?: string;
-}
-
-export interface BuyerData {
-  nombre: string;
-  apellido: string;
-  email: string;
-  telefono: string;
-  dni: string;
-}
-
-export interface ShippingAddress {
-  direccion: string;
-  numero: string;
-  piso?: string;
-  ciudad: string;
-  provincia: string;
-  codigoPostal: string;
-  notas?: string;
-}
-
-export interface CreateOrderData {
-  buyerData: BuyerData;
-  items: OrderItem[];
-  subtotal: number;
-  shippingCost: number;
-  total: number;
-  shippingAddress: ShippingAddress;
-}
-
-export interface OrderInfo {
-  id: number;
-  orderNumber: string;
-  status: string;
-}
-
-export interface CreateOrderResponse {
-  order: OrderInfo;
-  preferenceId: string;
-  initPoint: string;
-}
-
-export interface Order {
-  id: number;
-  orderNumber: string;
-  status: 'pending' | 'approved' | 'rejected' | 'failed' | 'shipped' | 'delivered' | 'cancelled';
-  preferenceId?: string;
-  paymentId?: string;
-  externalReference: string;
-  buyerName: string;
-  buyerEmail: string;
-  buyerPhone: string;
-  shippingAddress: ShippingAddress;
-  items: OrderItem[];
-  subtotal: number;
-  shippingCost: number;
-  total: number;
-  paidAt?: string;
-  shippedAt?: string;
-  deliveredAt?: string;
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface GetOrderResponse {
-  data: Order;
-}
-
-// ============================================
-// SUBSCRIPTIONS - Planes recurrentes
+// SUBSCRIPTIONS - Suscripciones recurrentes
 // ============================================
 
 export interface SubscriberData {

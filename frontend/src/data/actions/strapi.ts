@@ -1,9 +1,6 @@
 "use server";
 
 import type {
-  CreateOrderData,
-  CreateOrderResponse,
-  GetOrderResponse,
   CreateSubscriptionData,
   CreateSubscriptionResponse,
   GetSubscriptionResponse,
@@ -21,27 +18,6 @@ export async function getStrapiData(url: string) {
   }
 }
 
-export async function getProductos() {
-  try {
-    const response = await fetch(`${baseUrl}/api/productos?populate=*`);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-export async function getCategorias() {
-  try {
-    const response = await fetch(`${baseUrl}/api/categorias?populate=*`);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-
 export async function getPlans() {
   try {
     const response = await fetch(`${baseUrl}/api/plans?populate=*`);
@@ -49,81 +25,6 @@ export async function getPlans() {
     return data;
   } catch (error) {
     console.error(error);
-  }
-}
-
-// ============================================
-// ORDERS - Productos físicos
-// ============================================
-
-/**
- * Crear una orden de compra para productos físicos
- */
-export async function createOrder(orderData: CreateOrderData): Promise<CreateOrderResponse> {
-  // Primero crear la orden en Strapi
-  const strapiResponse = await fetch(`${baseUrl}/api/orders`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ data: orderData }),
-  });
-
-  if (!strapiResponse.ok) {
-    const errorText = await strapiResponse.text();
-    throw new Error(`Error al crear la orden: ${strapiResponse.status} ${errorText}`);
-  }
-
-  const strapiData = await strapiResponse.json();
-
-  // Luego crear la preferencia de MercadoPago en el frontend
-  const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000';
-  const mpResponse = await fetch(`${frontendUrl}/api/mercadopago`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      buyerData: orderData.buyerData,
-      items: orderData.items,
-      subtotal: orderData.subtotal,
-      shippingCost: orderData.shippingCost,
-      total: orderData.total,
-      shippingAddress: orderData.shippingAddress,
-      orderNumber: strapiData.order.orderNumber,
-    }),
-  });
-
-  if (!mpResponse.ok) {
-    const mpError = await mpResponse.json();
-    throw new Error(`Error al crear la preferencia de MercadoPago: ${mpError.error}`);
-  }
-
-  const mpData = await mpResponse.json();
-
-  return {
-    order: strapiData.order,
-    preferenceId: mpData.preferenceId,
-    initPoint: mpData.initPoint,
-  };
-}
-
-/**
- * Obtener una orden por ID
- */
-export async function getOrder(orderId: number) {
-  try {
-    const response = await fetch(`${baseUrl}/api/orders/${orderId}`);
-
-    if (!response.ok) {
-      throw new Error(`Error al obtener la orden: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching order:', error);
-    throw error;
   }
 }
 
