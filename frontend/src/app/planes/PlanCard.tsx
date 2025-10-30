@@ -1,9 +1,6 @@
-'use client';
-
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ShoppingCart, Flame } from 'lucide-react';
-import { useCheckoutStore } from '@/store/checkoutStore';
 import type { Plan } from '@/lib/interface';
 
 interface PlanCardProps {
@@ -11,6 +8,7 @@ interface PlanCardProps {
   borderStyle: string;
   buttonStyle: string;
   periodoTexto: string;
+  planUrl?: string;
 }
 
 const getPaymentNote = (periodo: string): string => {
@@ -22,14 +20,7 @@ const getPaymentNote = (periodo: string): string => {
   return notes[periodo] || '';
 };
 
-const PlanCard: React.FC<PlanCardProps> = ({ plan, borderStyle, buttonStyle, periodoTexto }) => {
-  const router = useRouter();
-  const { setSelectedPlan } = useCheckoutStore();
-
-  const handleSelectPlan = () => {
-    setSelectedPlan(plan);
-    router.push('/checkout/plan');
-  };
+const PlanCard: React.FC<PlanCardProps> = ({ plan, borderStyle, buttonStyle, periodoTexto, planUrl }) => {
 
   return (
     <div
@@ -125,19 +116,28 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan, borderStyle, buttonStyle, per
       </ul>
 
       {/* Button */}
-      <button
-        onClick={handleSelectPlan}
-        className={`w-full rounded-xl cursor-pointer font-semibold ${buttonStyle} transition-all duration-200 flex items-center justify-center gap-2 group mt-auto ${
-          plan.popular
-            ? 'py-5 px-8 text-lg shadow-md'
-            : 'py-4 px-6 text-base'
-        }`}
-      >
-        <ShoppingCart
-          className={`${plan.popular ? 'w-5 h-5' : 'w-4 h-4'}`}
-        />
-        Seleccionar Plan
-      </button>
+      {planUrl ? (
+        <Link
+          href={planUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`w-full rounded-xl cursor-pointer font-semibold ${buttonStyle} transition-all duration-200 flex items-center justify-center gap-2 group mt-auto ${
+            plan.popular
+              ? 'py-5 px-8 text-lg shadow-md'
+              : 'py-4 px-6 text-base'
+          }`}
+        >
+          <ShoppingCart
+            className={`${plan.popular ? 'w-5 h-5' : 'w-4 h-4'}`}
+          />
+          Seleccionar Plan
+        </Link>
+      ) : (
+        <div className="w-full rounded-xl bg-gray-300 text-gray-500 font-semibold transition-all duration-200 flex items-center justify-center gap-2 mt-auto py-4 px-6 text-base cursor-not-allowed">
+          <ShoppingCart className="w-4 h-4" />
+          No disponible
+        </div>
+      )}
     </div>
   );
 };

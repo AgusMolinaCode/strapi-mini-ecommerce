@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "planes_links",
+  "info": {
+    "singularName": "planes-link",
+    "pluralName": "planes-links",
+    "displayName": "PlanesLink",
+    "description": "URLs de MercadoPago para cada plan de suscripción"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "plan_id": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "description": "ID del plan (debe coincidir con plan.plan_id)"
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Nombre del plan (ej: Plan Básico)"
+    },
+    "text": {
+      "type": "text",
+      "description": "Descripción opcional del plan"
+    },
+    "url": {
+      "type": "string",
+      "required": true,
+      "description": "URL completa de MercadoPago para checkout"
+    }
+  }
+}

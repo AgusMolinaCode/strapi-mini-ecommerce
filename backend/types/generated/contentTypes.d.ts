@@ -584,6 +584,40 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiPlanesLinkPlanesLink extends Struct.CollectionTypeSchema {
+  collectionName: 'planes_links';
+  info: {
+    description: 'URLs de MercadoPago para cada plan de suscripci\u00F3n';
+    displayName: 'PlanesLink';
+    pluralName: 'planes-links';
+    singularName: 'planes-link';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::planes-link.planes-link'
+    > &
+      Schema.Attribute.Private;
+    plan_id: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    publishedAt: Schema.Attribute.DateTime;
+    text: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    url: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface ApiProductoProducto extends Struct.CollectionTypeSchema {
   collectionName: 'productos';
   info: {
@@ -1189,6 +1223,7 @@ declare module '@strapi/strapi' {
       'api::home-page.home-page': ApiHomePageHomePage;
       'api::order.order': ApiOrderOrder;
       'api::plan.plan': ApiPlanPlan;
+      'api::planes-link.planes-link': ApiPlanesLinkPlanesLink;
       'api::producto.producto': ApiProductoProducto;
       'api::subscription.subscription': ApiSubscriptionSubscription;
       'plugin::content-releases.release': PluginContentReleasesRelease;

@@ -103,50 +103,34 @@ export interface PlansResponse {
 }
 
 // ============================================
-// SUBSCRIPTIONS - Suscripciones recurrentes
+// PLAN LINKS - Enlaces de planes de suscripción
 // ============================================
 
-export interface SubscriberData {
-  nombre: string;
-  apellido: string;
-  email: string;
-  telefono: string;
-  dni: string;
-}
-
-export interface CreateSubscriptionData {
-  subscriberData: SubscriberData;
-  planId: number;
-  frequency: 'monthly' | 'yearly';
-}
-
-export interface SubscriptionInfo {
+export interface PlanLink {
   id: number;
-  status: string;
-}
-
-export interface CreateSubscriptionResponse {
-  subscription: SubscriptionInfo;
-  preapprovalId: string;
-  initPoint: string;
-}
-
-export interface Subscription {
-  id: number;
-  status: 'pending_payment' | 'active' | 'paused' | 'cancelled';
-  preapprovalId?: string;
-  externalReference: string;
-  plan: Plan;
-  subscriberName: string;
-  subscriberEmail: string;
-  subscriberPhone: string;
-  frequency: string;
-  amount: number;
-  startDate?: string;
+  documentId: string;
+  plan_id: string; // Relacionar con Plan.plan_id para evitar errores
+  title: string;
+  text: string;
+  url: string;
   createdAt: string;
   updatedAt: string;
+  publishedAt: string;
 }
 
-export interface GetSubscriptionResponse {
-  data: Subscription;
+export interface PlanLinksResponse {
+  data: PlanLink[];
+  meta: {
+    pagination?: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
+
+export interface SinglePlanLinkResponse {
+  data: PlanLink;
+  meta: Record<string, any>;
 }

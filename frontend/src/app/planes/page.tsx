@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { getPlans } from "@/data/actions/strapi";
-import type { Plan } from "@/lib/interface";
+import { getPlans, getPlanLinks } from "@/data/actions/strapi";
+import type { Plan, PlanLink } from "@/lib/interface";
 import PlanCard from "./PlanCard";
 
 // ISR: Revalidar cada 60 segundos
@@ -30,6 +30,33 @@ const getPeriodoTexto = (periodo: string): string => {
 const PlanesPage = async () => {
   const response = await getPlans();
   const plans: Plan[] = response?.data || [];
+
+  // Obtener plan links desde Strapi
+  const planLinksResponse = await getPlanLinks();
+  const planLinks: PlanLink[] = planLinksResponse?.data || [];
+
+  // URLs de fallback mientras se configura Strapi
+  // IMPORTANTE: Usar plan_id para relacionar correctamente, NO nombres
+  const fallbackUrls: Record<string, string> = {
+    'basico': 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2ef09b3443484eab87075b62849caf40',
+    'pro': 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2ef09b3443484eab87075b62849caf40', // TODO: Verificar si este ID es correcto
+    'elite': 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=8012421304cb44fca48df579301f2188',
+  };
+
+  // Crear un mapa de plan links por plan_id (más confiable que nombres)
+  const planLinkMap = new Map<string, string>();
+
+  // Primero agregar URLs de Strapi usando plan_id
+  planLinks.forEach((link) => {
+    planLinkMap.set(link.plan_id, link.url);
+  });
+
+  // Si no hay datos de Strapi, usar fallback URLs
+  if (planLinks.length === 0) {
+    Object.entries(fallbackUrls).forEach(([planId, url]) => {
+      planLinkMap.set(planId, url);
+    });
+  }
 
   // Reorganizar: [Básico, Pro (popular), Elite]
   const orderedPlans: Plan[] = [];
@@ -73,6 +100,9 @@ const PlanesPage = async () => {
             const buttonStyle = getEstiloBoton(plan.popular);
             const periodoTexto = getPeriodoTexto(plan.periodo);
 
+            // Buscar la URL correspondiente al plan usando plan_id (más confiable)
+            const planUrl = planLinkMap.get(plan.plan_id);
+
             return (
               <PlanCard
                 key={plan.id}
@@ -80,6 +110,7 @@ const PlanesPage = async () => {
                 borderStyle={borderStyle}
                 buttonStyle={buttonStyle}
                 periodoTexto={periodoTexto}
+                planUrl={planUrl}
               />
             );
           })}
