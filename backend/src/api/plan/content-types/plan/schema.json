@@ -38,6 +38,9 @@
       "type": "component",
       "component": "plan.feature-full",
       "repeatable": true
+    },
+    "url": {
+      "type": "string"
     }
   }
 }
