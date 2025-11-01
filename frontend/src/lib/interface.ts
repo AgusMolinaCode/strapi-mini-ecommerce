@@ -83,6 +83,7 @@ export interface Plan {
   periodo: string;
   popular: boolean | null;
   plan_id: string;
+  url: string;
   feature: PlanFeature[];
   feature_full: PlanFeatureFull[];
   createdAt: string;
@@ -100,37 +101,4 @@ export interface PlansResponse {
       total: number;
     };
   };
-}
-
-// ============================================
-// PLAN LINKS - Enlaces de planes de suscripción
-// ============================================
-
-export interface PlanLink {
-  id: number;
-  documentId: string;
-  plan_id: string; // Relacionar con Plan.plan_id para evitar errores
-  title: string;
-  text: string;
-  url: string;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-}
-
-export interface PlanLinksResponse {
-  data: PlanLink[];
-  meta: {
-    pagination?: {
-      page: number;
-      pageSize: number;
-      pageCount: number;
-      total: number;
-    };
-  };
-}
-
-export interface SinglePlanLinkResponse {
-  data: PlanLink;
-  meta: Record<string, any>;
 }
