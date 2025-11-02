@@ -22,4 +22,12 @@ export async function getPlans() {
   }
 }
 
-
+export async function getActivities() {
+  try {
+    const response = await fetch(`${baseUrl}/api/gym-activities?populate=*&sort=order:asc`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}

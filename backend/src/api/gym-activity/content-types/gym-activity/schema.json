@@ -1,0 +1,57 @@
+{
+  "kind": "collectionType",
+  "collectionName": "gym_activities",
+  "info": {
+    "singularName": "gym-activity",
+    "pluralName": "gym-activities",
+    "displayName": "Gym Activity"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "order": {
+      "type": "integer"
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": [
+        "Dumbbell",
+        "Heart",
+        "Zap",
+        "Bike",
+        "Activity",
+        "Flame",
+        "Target",
+        "Trophy",
+        "Footprints",
+        "Timer",
+        "Swords",
+        "Shield",
+        "Medal",
+        "Sparkles",
+        "Star"
+      ]
+    },
+    "alt": {
+      "type": "string"
+    }
+  }
+}

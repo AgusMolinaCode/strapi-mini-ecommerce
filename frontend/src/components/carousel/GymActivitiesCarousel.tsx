@@ -5,68 +5,52 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import { motion } from "motion/react";
+import { GymActivity, GymActivityIcon } from "@/lib/interface";
+import {
+  Dumbbell,
+  Heart,
+  Zap,
+  Bike,
+  Activity,
+  Flame,
+  Target,
+  Trophy,
+  Footprints,
+  Timer,
+  Swords,
+  Shield,
+  Medal,
+  Sparkles,
+  Star,
+  LucideIcon
+} from "lucide-react";
 
-interface GymActivity {
-  id: number;
-  title: string;
-  subtitle: string;
-  icon: string;
-  image: string;
-  alt: string;
+const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+
+// Icon mapping
+const iconMap: Record<GymActivityIcon, LucideIcon> = {
+  Dumbbell,
+  Heart,
+  Zap,
+  Bike,
+  Activity,
+  Flame,
+  Target,
+  Trophy,
+  Footprints,
+  Timer,
+  Swords,
+  Shield,
+  Medal,
+  Sparkles,
+  Star,
+};
+
+interface Props {
+  activities: GymActivity[];
 }
 
-const activities: GymActivity[] = [
-  {
-    id: 1,
-    title: "Entrenamiento Funcional",
-    subtitle: "💪 Mejorá tu fuerza y movilidad",
-    icon: "⚡",
-    image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&h=900&fit=crop&q=80",
-    alt: "Personas realizando entrenamiento funcional"
-  },
-  {
-    id: 2,
-    title: "Musculación",
-    subtitle: "🏋️ Desarrollá masa muscular",
-    icon: "💪",
-    image: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1600&h=900&fit=crop&q=80",
-    alt: "Entrenamiento con pesas"
-  },
-  {
-    id: 3,
-    title: "Cardio Intensivo",
-    subtitle: "❤️ Quemá calorías y energizate",
-    icon: "🔥",
-    image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=1600&h=900&fit=crop&q=80",
-    alt: "Clase de cardio en grupo"
-  },
-  {
-    id: 4,
-    title: "Yoga y Estiramiento",
-    subtitle: "🧘 Equilibrio mente y cuerpo",
-    icon: "☮️",
-    image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1600&h=900&fit=crop&q=80",
-    alt: "Sesión de yoga en grupo"
-  },
-  {
-    id: 5,
-    title: "Spinning",
-    subtitle: "🚴 Pedalea hacia tus metas",
-    icon: "🎯",
-    image: "https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=1600&h=900&fit=crop&q=80",
-    alt: "Clase de spinning indoor"
-  },
-  {
-    id: 6,
-    title: "CrossFit",
-    subtitle: "⚡ Superá tus límites",
-    icon: "🏆",
-    image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1600&h=900&fit=crop&q=80",
-    alt: "Entrenamiento de CrossFit"
-  }
-];
-
-export function GymActivitiesCarousel() {
+export function GymActivitiesCarousel({ activities }: Props) {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
@@ -118,46 +102,58 @@ export function GymActivitiesCarousel() {
         ref={emblaRef}
       >
         <div className="flex">
-          {activities.map((activity) => (
-            <div
-              key={activity.id}
-              className="flex-[0_0_100%] min-w-0"
-            >
-              <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] overflow-hidden group shadow-2xl">
-                {/* Image */}
-                <Image
-                  src={activity.image}
-                  alt={activity.alt}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  sizes="100vw"
-                  priority={activity.id === 1}
-                />
+          {activities.map((activity) => {
+            const imageUrl = activity.image?.url ? baseUrl + activity.image.url : "";
+            const IconComponent = iconMap[activity.icon];
 
-                {/* Gradient Overlay with Title and Subtitle (z-10) */}
-                <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-32 pb-8 px-8">
-                  <motion.h3
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="text-white font-bold text-2xl sm:text-3xl lg:text-4xl drop-shadow-2xl mb-2"
-                  >
-                    {activity.title}
-                  </motion.h3>
-                  <motion.p
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
-                    className="text-white/90 text-base sm:text-lg lg:text-xl font-medium drop-shadow-lg"
-                  >
-                    {activity.subtitle}
-                  </motion.p>
+            return (
+              <div
+                key={activity.id}
+                className="flex-[0_0_100%] min-w-0"
+              >
+                <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] overflow-hidden group shadow-2xl">
+                  {/* Image */}
+                  <Image
+                    src={imageUrl}
+                    alt={activity.alt || activity.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    sizes="100vw"
+                    priority={activity.id === 1}
+                  />
+
+                  {/* Gradient Overlay with Title, Icon and Subtitle (z-10) */}
+                  <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-32 pb-8 px-8">
+                    <div className="flex items-center gap-4 mb-3">
+                      {IconComponent && (
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+                          <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                        </div>
+                      )}
+                      <motion.h3
+                        initial={{ opacity: 0, x: -30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                        className="text-white font-bold text-2xl sm:text-3xl lg:text-4xl drop-shadow-2xl"
+                      >
+                        {activity.title}
+                      </motion.h3>
+                    </div>
+                    <motion.p
+                      initial={{ opacity: 0, x: -30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{ duration: 0.5, delay: 0.4 }}
+                      className="text-white/90 text-base sm:text-lg lg:text-xl font-medium drop-shadow-lg"
+                    >
+                      {activity.subtitle}
+                    </motion.p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </motion.div>
 

@@ -3,13 +3,16 @@ import PlanHeroSection from "@/components/planHeroSection/PlanHeroSection";
 import CTASection from "@/components/ctaSection/CTASection";
 import { WobbleCardDemo } from "@/components/ui/WobbleCardDemo";
 import { GymActivitiesCarousel } from "@/components/carousel/GymActivitiesCarousel";
-import { getStrapiData } from "@/data/actions/strapi";
+import { getStrapiData, getActivities } from "@/data/actions/strapi";
 
 // ISR: Revalidar cada 60 segundos
 export const revalidate = 60;
 
 export default async function Home() {
   const strapiData = await getStrapiData("/api/home-page?populate=*");
+  const activitiesData = await getActivities();
+
+  console.log('[Home] activitiesData:', activitiesData);
 
   return (
     <div>
@@ -42,7 +45,7 @@ export default async function Home() {
               Explorá la variedad de entrenamientos disponibles en nuestro gimnasio
             </p>
           </div>
-          <GymActivitiesCarousel />
+          <GymActivitiesCarousel activities={activitiesData?.data || []} />
         </div>
       </section>
 

@@ -102,3 +102,50 @@ export interface PlansResponse {
     };
   };
 }
+
+// ============================================
+// GYM ACTIVITIES - Actividades del Gimnasio
+// ============================================
+
+export type GymActivityIcon =
+  | "Dumbbell"
+  | "Heart"
+  | "Zap"
+  | "Bike"
+  | "Activity"
+  | "Flame"
+  | "Target"
+  | "Trophy"
+  | "Footprints"
+  | "Timer"
+  | "Swords"
+  | "Shield"
+  | "Medal"
+  | "Sparkles"
+  | "Star";
+
+export interface GymActivity {
+  id: number;
+  documentId: string;
+  title: string;
+  subtitle: string;
+  icon: GymActivityIcon;
+  image: Imagen;
+  alt: string;
+  order: number;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface GymActivitiesResponse {
+  data: GymActivity[];
+  meta: {
+    pagination?: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
