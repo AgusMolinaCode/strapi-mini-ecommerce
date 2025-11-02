@@ -103,7 +103,11 @@ export function GymActivitiesCarousel({ activities }: Props) {
       >
         <div className="flex">
           {activities.map((activity) => {
-            const imageUrl = activity.image?.url ? baseUrl + activity.image.url : "";
+            const imageUrl = activity.image?.url
+              ? activity.image.url.startsWith('http')
+                ? activity.image.url
+                : baseUrl + activity.image.url
+              : "";
             const IconComponent = iconMap[activity.icon];
 
             return (
