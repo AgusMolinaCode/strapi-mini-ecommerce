@@ -149,3 +149,31 @@ export interface GymActivitiesResponse {
     };
   };
 }
+
+// ============================================
+// BENEFICIOS - Beneficios del Gimnasio
+// ============================================
+
+export interface Beneficio {
+  id: number;
+  documentId: string;
+  tag: string;
+  title: string;
+  sutitle: string;
+  icon: GymActivityIcon;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface BeneficiosResponse {
+  data: Beneficio[];
+  meta: {
+    pagination?: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}

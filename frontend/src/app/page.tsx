@@ -3,7 +3,7 @@ import PlanHeroSection from "@/components/planHeroSection/PlanHeroSection";
 import CTASection from "@/components/ctaSection/CTASection";
 import { WobbleCardDemo } from "@/components/ui/WobbleCardDemo";
 import { GymActivitiesCarousel } from "@/components/carousel/GymActivitiesCarousel";
-import { getStrapiData, getActivities } from "@/data/actions/strapi";
+import { getStrapiData, getActivities, getBeneficios } from "@/data/actions/strapi";
 
 // ISR: Revalidar cada 60 segundos
 export const revalidate = 60;
@@ -11,8 +11,7 @@ export const revalidate = 60;
 export default async function Home() {
   const strapiData = await getStrapiData("/api/home-page?populate=*");
   const activitiesData = await getActivities();
-
-  console.log('[Home] activitiesData:', activitiesData);
+  const beneficiosData = await getBeneficios();
 
   return (
     <div>
@@ -30,7 +29,7 @@ export default async function Home() {
               Descubrí los beneficios que hacen de nuestro gimnasio el mejor lugar para alcanzar tus objetivos
             </p>
           </div>
-          <WobbleCardDemo />
+          <WobbleCardDemo beneficios={beneficiosData?.data || []} />
         </div>
       </section>
 

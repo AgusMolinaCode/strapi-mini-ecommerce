@@ -430,6 +430,55 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiBeneficioBeneficio extends Struct.CollectionTypeSchema {
+  collectionName: 'beneficios';
+  info: {
+    displayName: 'Beneficio';
+    pluralName: 'beneficios';
+    singularName: 'beneficio';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    icon: Schema.Attribute.Enumeration<
+      [
+        'Dumbbell',
+        'Heart',
+        'Zap',
+        'Bike',
+        'Activity',
+        'Flame',
+        'Target',
+        'Trophy',
+        'Footprints',
+        'Timer',
+        'Swords',
+        'Shield',
+        'Medal',
+        'Sparkles',
+        'Star',
+      ]
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::beneficio.beneficio'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    sutitle: Schema.Attribute.String;
+    tag: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiCategoriaCategoria extends Struct.CollectionTypeSchema {
   collectionName: 'categorias';
   info: {
@@ -1271,6 +1320,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::beneficio.beneficio': ApiBeneficioBeneficio;
       'api::categoria.categoria': ApiCategoriaCategoria;
       'api::gym-activity.gym-activity': ApiGymActivityGymActivity;
       'api::home-page.home-page': ApiHomePageHomePage;

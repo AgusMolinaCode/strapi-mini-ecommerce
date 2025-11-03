@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "beneficios",
+  "info": {
+    "singularName": "beneficio",
+    "pluralName": "beneficios",
+    "displayName": "Beneficio"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "tag": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "sutitle": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": [
+        "Dumbbell",
+        "Heart",
+        "Zap",
+        "Bike",
+        "Activity",
+        "Flame",
+        "Target",
+        "Trophy",
+        "Footprints",
+        "Timer",
+        "Swords",
+        "Shield",
+        "Medal",
+        "Sparkles",
+        "Star"
+      ]
+    }
+  }
+}

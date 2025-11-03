@@ -31,3 +31,13 @@ export async function getActivities() {
     console.error(error);
   }
 }
+
+export async function getBeneficios() {
+  try {
+    const response = await fetch(`${baseUrl}/api/beneficios`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
