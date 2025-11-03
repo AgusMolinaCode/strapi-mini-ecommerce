@@ -164,7 +164,6 @@ MERCADO_PAGO_ACCESS_TOKEN=your-access-token
 
 ```env
 NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
-NEXT_PUBLIC_MERCADO_PAGO_PUBLIC_KEY=your-public-key
 ```
 
 ### Iniciar Desarrollo
@@ -334,7 +333,7 @@ of this software and associated documentation files...
 ## 💪 Autor
 
 **Tu Nombre**
-- GitHub: [@yourusername](https://github.com/yourusername)
+- GitHub: [@yourusername](https://github.com/AgusMolinaCode)
 
 ---
 
