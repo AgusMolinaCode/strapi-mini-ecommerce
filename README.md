@@ -266,11 +266,9 @@ npm run start
 **Railway (Backend):**
 - DATABASE_* (PostgreSQL credentials)
 - APP_KEYS, JWT_SECRET, etc.
-- MERCADO_PAGO_ACCESS_TOKEN
 
 **Vercel (Frontend):**
 - NEXT_PUBLIC_STRAPI_URL
-- NEXT_PUBLIC_MERCADO_PAGO_PUBLIC_KEY
 
 ---
 
