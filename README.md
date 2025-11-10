@@ -162,7 +162,6 @@ MERCADO_PAGO_ACCESS_TOKEN=your-access-token
 
 #### Frontend (.env.local)
 
-
 ```env
 NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
 ```
